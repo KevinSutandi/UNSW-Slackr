@@ -3,7 +3,7 @@
 html, body {
     margin: 0;
     padding: 0;
-    background-color: #fafafa;
+    background-color: #272727;
+    color: white;
     height: 100%;
-    font-family: -apple-system, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
