@@ -7,3 +7,7 @@ html, body {
     color: white;
     height: 100%;
 }
+
+.hide-page {
+    display: none
+}

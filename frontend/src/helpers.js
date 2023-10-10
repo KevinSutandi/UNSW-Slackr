@@ -29,3 +29,31 @@ export function fileToDataUrl(file) {
     reader.readAsDataURL(file);
     return dataUrlPromise;
 }
+
+const backend = "http://localhost:5005/";
+const frontend = "http://localhost:";
+
+export const apiCall = (path, body) => {
+    return new Promise((resolve, reject) => {
+      fetch(backend + path, {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+        },
+        body: JSON.stringify(body),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) {
+            alert(data.error); // Show Alert when data.error
+          } else {
+            resolve(data); // Resolve with the data
+          }
+        })
+    });
+  };
+
+export function setTokens(token, userId) {
+    localStorage.setItem('token', token);
+    localStorage.setItem('userId', userId);
+}
