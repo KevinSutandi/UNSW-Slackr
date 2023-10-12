@@ -8,6 +8,14 @@
       "image": null,
       "sessionActive": true
     },
+    "49403": {
+      "email": "",
+      "name": "",
+      "password": "asdf",
+      "bio": null,
+      "image": null,
+      "sessionActive": true
+    },
     "56422": {
       "email": "sebastian@email.com",
       "name": "Sebastian",
@@ -15,6 +23,22 @@
       "bio": null,
       "image": null,
       "sessionActive": true
+    },
+    "70238": {
+      "email": "kevins050324@gmail.com",
+      "name": "Kevin",
+      "password": "!10Ve1no",
+      "bio": null,
+      "image": null,
+      "sessionActive": true
+    },
+    "74696": {
+      "email": "kevin@email.com",
+      "name": "Kevin",
+      "password": "kevin",
+      "bio": null,
+      "image": null,
+      "sessionActive": false
     }
   },
   "channels": {

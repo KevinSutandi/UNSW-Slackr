@@ -1,0 +1,1 @@
+npx http-server frontend -p -c-1 8080
