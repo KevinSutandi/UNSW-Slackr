@@ -5,6 +5,7 @@ import { fileToDataUrl, apiCall } from "./helpers.js";
 // Function to check token when in homepage or any page
 function isTokenValid() {
     const token = localStorage.getItem('token');
+    console.log(token);
     return token !== null && token !== undefined;
   }
   
