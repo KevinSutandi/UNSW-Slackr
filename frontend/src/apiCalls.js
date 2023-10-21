@@ -1,5 +1,14 @@
 // A helper you may want to use when uploading new images to the server.
-import { fileToDataUrl, apiCall, setTokens, showPage } from "./helpers.js";
+import {
+  fileToDataUrl,
+  apiCall,
+  setTokens,
+  showPage,
+  apiCallGet,
+  populateChannelsList,
+} from "./helpers.js";
+
+import { globalUserId } from "./main.js";
 
 function showErrorModal(errorMessage) {
   const errorModal = document.getElementById("errorModal");
@@ -73,10 +82,34 @@ export const handleRegister = () => {
 export const handleLogout = () => {
   apiCall("auth/logout", {}, "POST", true)
     .then((response) => {
-      setTokens(response.token, response.userId);
+      setTokens(undefined, undefined);
       showPage("login-page");
     })
     .catch((error) => {
       showErrorModal(error);
+    });
+};
+
+export const handleChannelDisplay = () => {
+  apiCallGet("channel", true)
+    .then((response) => {
+      const joinedChannel = [];
+      const otherChannels = [];
+      response.channels.forEach((channel) => {
+        if (
+          channel.members &&
+          channel.members.includes(parseInt(globalUserId))
+        ) {
+          joinedChannel.push(channel);
+        } else {
+          otherChannels.push(channel);
+        }
+      });
+
+      populateChannelsList(joinedChannel, "joinedChannelContainer");
+      populateChannelsList(otherChannels, "publicChannelContainer");
+    })
+    .catch((error) => {
+      console.error("Error fetching channels:", error);
     });
 };

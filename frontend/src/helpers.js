@@ -55,9 +55,30 @@ export const apiCall = (path, body, method, isAuth = false) => {
   });
 };
 
+export const apiCallGet = (path, isAuth = false) => {
+  return new Promise((resolve, reject) => {
+    fetch(backend + path, {
+      method: "GET",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: isAuth ? `Bearer ${globalToken}` : undefined,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          reject(data.error);
+        } else {
+          resolve(data); // Resolve with the data
+        }
+      });
+  });
+};
+
 export function setTokens(token, userId) {
   localStorage.setItem("token", token);
   localStorage.setItem("userId", userId);
+  token;
 }
 
 export function showPage(pageId) {
@@ -72,5 +93,16 @@ export function showPage(pageId) {
     } else {
       page.classList.add("d-none");
     }
+  });
+}
+
+export function populateChannelsList(channels, targetElement) {
+  const channelList = document.getElementById(targetElement);
+
+  channels.forEach((channel) => {
+    const channelItem = document.querySelector(".channel-item").cloneNode(true);
+    channelItem.classList.remove("d-none"); // Remove the 'd-none' class to make it visible
+    channelItem.querySelector("#channelName").textContent = channel.name;
+    channelList.appendChild(channelItem);
   });
 }

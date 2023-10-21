@@ -1,8 +1,14 @@
-import { handleLogin, handleLogout, handleRegister } from "./apiCalls.js";
+import {
+  handleChannelDisplay,
+  handleLogin,
+  handleLogout,
+  handleRegister,
+} from "./apiCalls.js";
 
 import { showPage } from "./helpers.js";
 
 export let globalToken = undefined;
+export let globalUserId = undefined;
 
 function handleRegisterChange() {
   showPage("register-page");
@@ -35,11 +41,17 @@ document
   .addEventListener("click", handleLoginChange);
 
 window.addEventListener("DOMContentLoaded", showAppropriatePage);
+window.addEventListener("load", handleChannelDisplay);
+
+// // For channel Creation
+// document.getElementById("");
 
 // Check if a valid token exists
 // Function to check token when on the homepage or any page
 function isTokenValid() {
   const token = localStorage.getItem("token");
+  const userId = localStorage.getItem("userId");
   globalToken = token;
+  globalUserId = userId;
   return token !== "undefined";
 }

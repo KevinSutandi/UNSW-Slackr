@@ -6,7 +6,7 @@
       "password": "solongbouldercity",
       "bio": null,
       "image": null,
-      "sessionActive": true
+      "sessionActive": false
     },
     "49403": {
       "email": "",
@@ -30,7 +30,7 @@
       "password": "!10Ve1no",
       "bio": null,
       "image": null,
-      "sessionActive": true
+      "sessionActive": false
     },
     "74696": {
       "email": "kevin@email.com",
