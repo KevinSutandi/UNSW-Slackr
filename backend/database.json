@@ -26,6 +26,17 @@
     }
   },
   "channels": {
+    "354383": {
+      "name": "Kevin Test Channel 1",
+      "creator": 70238,
+      "private": false,
+      "description": "This is specifically for testing",
+      "createdAt": "2023-10-22T11:56:27.742Z",
+      "members": [
+        70238
+      ],
+      "messages": []
+    },
     "813580": {
       "name": "public channel",
       "creator": 15272,
@@ -458,6 +469,17 @@
           "reacts": []
         }
       ]
+    },
+    "841296": {
+      "name": "Kevin's Private Channel",
+      "creator": 70238,
+      "private": true,
+      "description": "This should be private",
+      "createdAt": "2023-10-22T12:03:12.393Z",
+      "members": [
+        70238
+      ],
+      "messages": []
     }
   },
   "nextMessageId": 43

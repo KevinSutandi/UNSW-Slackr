@@ -67,7 +67,7 @@
             </form>
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-primary" id="createChannelButton">Create Channel</button>
+            <button type="button" class="btn btn-primary" id="createChannelButton" data-bs-dismiss="modal">Create Channel</button>
           </div>
         </div>
       </div>
@@ -78,15 +78,15 @@
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
         <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"/>
       </svg>
-      <span id="channelName" class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary" style="flex: 1 1 0%;">New Channel</span>
+      <span id="channelName" class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary" style="flex: 1 1 0%;"></span>
     </a>
 
-    <!-- Channel Template for PublicChannels -->
+    <!-- Channel Template for Private Channels -->
     <a class="channel-item-private d-flex btn btn-dark align-items-center mt-1 d-none">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
         <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
       </svg>
-      <span id="channelName" class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary" style="flex: 1 1 0%;">New Channel</span>
+      <span id="channelName" class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary" style="flex: 1 1 0%;"></span>
     </a>
 
 
@@ -147,7 +147,7 @@
           <li class="nav-item px-3 d-flex mb-2">
             <span class="my-auto" style="flex: 1 1 0%;">Joined Channels</span>
             <div>
-              <button id="createChannel" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createChannelModal">
+              <button id="createChannel" type="button" class="btn btn-dark">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="16"
@@ -174,10 +174,17 @@
         <button id="logoutButton" type="button" class="btn btn-secondary">Sign out</button>
       </div>
       <div class="px-4 py-5 mx-auto my-auto text-center" id="welcome-screen">
-        <h1 class="display-7 fw-bold text-body-secondary">Welcome to Slackr</h1>
+        <h1 class="display-7 fw-bold text-body-secondary">Slackr</h1>
         <div class="col-lg-6 mx-auto">
           <p class=" mb-4 text-secondary">Select a Channel!</p>
         </div>
+      </div>
+      <div class="mt-5 mx-5 ps-lg-2 d-none" id="channelInfoPage">
+        <h2 class="mb-1" id="channelViewName">This would be channel name</h2>
+        <span>
+          <p class="text-secondary-emphasis" id="channelViewDescription">This would be channel description</p>
+          <p class="text-secondary" id="channelCreationDate">Created on: 12/03/2023</p>
+        </span>
       </div>
     </main>
     <script type="module" src="src/main.js"></script>

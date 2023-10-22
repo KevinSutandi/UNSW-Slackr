@@ -6,10 +6,10 @@ import {
   handleCreateChannel,
 } from "./apiCalls.js";
 
-import { showPage } from "./helpers.js";
+import { showPage, openCreateChannelModal } from "./helpers.js";
 
-export let globalToken = undefined;
-export let globalUserId = undefined;
+export let globalToken = null;
+export let globalUserId = null;
 
 function handleRegisterChange() {
   showPage("register-page");
@@ -43,6 +43,10 @@ document
   .addEventListener("click", handleLoginChange);
 
 document
+  .getElementById("createChannel")
+  .addEventListener("click", openCreateChannelModal);
+
+document
   .getElementById("createChannelButton")
   .addEventListener("click", handleCreateChannel);
 
@@ -55,5 +59,9 @@ function isTokenValid() {
   const userId = localStorage.getItem("userId");
   globalToken = token;
   globalUserId = userId;
-  return token !== "undefined";
+  if (token === "undefined" || token === null) {
+    return false;
+  } else {
+    return true;
+  }
 }

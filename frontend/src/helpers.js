@@ -15,6 +15,7 @@ import { globalToken } from "./main.js";
  * @param {File} file The file to be read.
  * @return {Promise<string>} Promise which resolves to the file as a data url.
  */
+
 export function fileToDataUrl(file) {
   const validFileTypes = ["image/jpeg", "image/png", "image/jpg"];
   const valid = validFileTypes.find((type) => type === file.type);
@@ -96,30 +97,10 @@ export function showPage(pageId) {
   });
 }
 
-export function populateChannelsList(channels, targetElement) {
-  const channelList = document.getElementById(targetElement);
+export function openCreateChannelModal() {
+  const newChannelModal = new bootstrap.Modal(
+    document.getElementById("createChannelModal")
+  );
 
-  // Get the channel templates
-  const channelItemTemplate = document
-    .querySelector(".channel-item")
-    .cloneNode(true);
-  const channelItemPrivateTemplate = document
-    .querySelector(".channel-item-private")
-    .cloneNode(true);
-
-  channels.forEach((channel) => {
-    // Clone the appropriate template for each channel
-    const channelItem = channel.private
-      ? channelItemPrivateTemplate.cloneNode(true)
-      : channelItemTemplate.cloneNode(true);
-
-    // Remove the 'd-none' class to make the item visible
-    channelItem.classList.remove("d-none");
-
-    // Set the channel name
-    channelItem.querySelector("#channelName").textContent = channel.name;
-
-    // Append the item to the channel list
-    channelList.appendChild(channelItem);
-  });
+  newChannelModal.show();
 }
