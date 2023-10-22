@@ -54,11 +54,11 @@
             <form>
               <div class="mb-3">
                 <label for="channel-name" class="col-form-label">Channel Name:</label>
-                <input type="text" class="form-control" id="channel-name">
+                <input type="text" class="form-control" id="channelNameInput">
               </div>
               <div class="mb-3">
                 <label for="description-text" class="col-form-label">Description:</label>
-                <textarea class="form-control" id="description-text"></textarea>
+                <textarea class="form-control" id="descriptionInput"></textarea>
               </div>
                <div class="form-check form-switch">
                 <input class="form-check-input" type="checkbox" role="switch" id="setPrivateChannel">
@@ -73,10 +73,18 @@
       </div>
     </div>
 
-    <!-- Channel Template for MyChannels/PublicChannels -->
+    <!-- Channel Template for PublicChannels -->
     <a class="channel-item d-flex btn btn-dark align-items-center mt-1 d-none">
       <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock" viewBox="0 0 16 16">
         <path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"/>
+      </svg>
+      <span id="channelName" class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary" style="flex: 1 1 0%;">New Channel</span>
+    </a>
+
+    <!-- Channel Template for PublicChannels -->
+    <a class="channel-item-private d-flex btn btn-dark align-items-center mt-1 d-none">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock" viewBox="0 0 16 16">
+        <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/>
       </svg>
       <span id="channelName" class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary" style="flex: 1 1 0%;">New Channel</span>
     </a>
@@ -160,14 +168,16 @@
         <ul class="nav nav-pills flex-column mb-auto" id="publicChannelContainer">
           <li class="nav-item px-3 d-flex my-3">
             <span class="my-auto" style="flex: 1 1 0%;">Public Channels</span>
-            <div>
-              <button id="createChannel" type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#createChannelModal">
-              </button>
-            </div>
           </li>
         </ul>
         <hr />
         <button id="logoutButton" type="button" class="btn btn-secondary">Sign out</button>
+      </div>
+      <div class="px-4 py-5 mx-auto my-auto text-center" id="welcome-screen">
+        <h1 class="display-7 fw-bold text-body-secondary">Welcome to Slackr</h1>
+        <div class="col-lg-6 mx-auto">
+          <p class=" mb-4 text-secondary">Select a Channel!</p>
+        </div>
       </div>
     </main>
     <script type="module" src="src/main.js"></script>

@@ -102,14 +102,38 @@ export const handleChannelDisplay = () => {
         ) {
           joinedChannel.push(channel);
         } else {
-          otherChannels.push(channel);
+          if (channel.private == false) {
+            otherChannels.push(channel);
+          }
         }
       });
 
+      console.log(joinedChannel);
       populateChannelsList(joinedChannel, "joinedChannelContainer");
       populateChannelsList(otherChannels, "publicChannelContainer");
     })
     .catch((error) => {
-      console.error("Error fetching channels:", error);
+      showErrorModal(error);
+    });
+};
+
+export const handleCreateChannel = () => {
+  let channelNameInput = document.getElementById("channelNameInput").value;
+  let descriptionInput = document.getElementById("descriptionInput").value;
+  let isPrivate = document.getElementById("setPrivateChannel").checked;
+
+  console.log(isPrivate);
+  const body = {
+    name: channelNameInput,
+    private: isPrivate,
+    description: descriptionInput,
+  };
+
+  apiCall("channel", body, "POST", true)
+    .then((response) => {
+      handleChannelDisplay();
+    })
+    .catch((error) => {
+      showErrorModal(error);
     });
 };

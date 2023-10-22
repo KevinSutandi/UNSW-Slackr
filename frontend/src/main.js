@@ -3,6 +3,7 @@ import {
   handleLogin,
   handleLogout,
   handleRegister,
+  handleCreateChannel,
 } from "./apiCalls.js";
 
 import { showPage } from "./helpers.js";
@@ -21,6 +22,7 @@ function handleLoginChange() {
 function showAppropriatePage() {
   if (isTokenValid()) {
     showPage("main-page");
+    window.addEventListener("load", handleChannelDisplay);
   } else {
     showPage("login-page");
   }
@@ -40,11 +42,11 @@ document
   .getElementById("loginChangeButton")
   .addEventListener("click", handleLoginChange);
 
-window.addEventListener("DOMContentLoaded", showAppropriatePage);
-window.addEventListener("load", handleChannelDisplay);
+document
+  .getElementById("createChannelButton")
+  .addEventListener("click", handleCreateChannel);
 
-// // For channel Creation
-// document.getElementById("");
+window.addEventListener("DOMContentLoaded", showAppropriatePage);
 
 // Check if a valid token exists
 // Function to check token when on the homepage or any page

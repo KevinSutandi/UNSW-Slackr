@@ -40,7 +40,7 @@ export const apiCall = (path, body, method, isAuth = false) => {
       method: method,
       headers: {
         "Content-type": "application/json",
-        Authorization: isAuth ? `Bearer ${globalToken}` : undefined,
+        Authorization: isAuth ? `${globalToken}` : undefined,
       },
       body: JSON.stringify(body),
     })
@@ -61,7 +61,7 @@ export const apiCallGet = (path, isAuth = false) => {
       method: "GET",
       headers: {
         "Content-type": "application/json",
-        Authorization: isAuth ? `Bearer ${globalToken}` : undefined,
+        Authorization: isAuth ? `${globalToken}` : undefined,
       },
     })
       .then((response) => response.json())
@@ -99,10 +99,27 @@ export function showPage(pageId) {
 export function populateChannelsList(channels, targetElement) {
   const channelList = document.getElementById(targetElement);
 
+  // Get the channel templates
+  const channelItemTemplate = document
+    .querySelector(".channel-item")
+    .cloneNode(true);
+  const channelItemPrivateTemplate = document
+    .querySelector(".channel-item-private")
+    .cloneNode(true);
+
   channels.forEach((channel) => {
-    const channelItem = document.querySelector(".channel-item").cloneNode(true);
-    channelItem.classList.remove("d-none"); // Remove the 'd-none' class to make it visible
+    // Clone the appropriate template for each channel
+    const channelItem = channel.private
+      ? channelItemPrivateTemplate.cloneNode(true)
+      : channelItemTemplate.cloneNode(true);
+
+    // Remove the 'd-none' class to make the item visible
+    channelItem.classList.remove("d-none");
+
+    // Set the channel name
     channelItem.querySelector("#channelName").textContent = channel.name;
+
+    // Append the item to the channel list
     channelList.appendChild(channelItem);
   });
 }
