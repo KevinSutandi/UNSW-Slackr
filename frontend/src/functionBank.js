@@ -123,7 +123,12 @@ export function handleChannelClick(channelId) {
       changeChannelViewPage(response, channelId);
     })
     .catch((error) => {
-      showErrorModal(error);
+      const notMember = "Authorised user is not a member of this channel";
+      if (error === notMember) {
+        openJoinChannelModal(channelId);
+      } else {
+        showErrorModal(error);
+      }
     });
 }
 
@@ -147,6 +152,40 @@ export const handleCreateChannel = () => {
       showErrorModal(error);
     });
 };
+
+async function handleLeaveChannel(channelId) {
+  try {
+    // Call the API to update the channel data
+    const response = await apiCall(
+      `channel/${channelId}/leave`,
+      {},
+      "POST",
+      true
+    );
+
+    changeChannelViewWelcome();
+    handleChannelDisplay();
+  } catch (error) {
+    showErrorModal(error);
+  }
+}
+
+async function handleJoinChannel(channelId) {
+  try {
+    // Call the API to update the channel data
+    const response = await apiCall(
+      `channel/${channelId}/join`,
+      {},
+      "POST",
+      true
+    );
+
+    handleChannelClick(channelId);
+    handleChannelDisplay();
+  } catch (error) {
+    showErrorModal(error);
+  }
+}
 
 ///////////////////////////////////////////////////
 /**
@@ -267,6 +306,10 @@ export async function changeChannelViewPage(channel, channelId) {
     openEditChannelModal(channel, channelId)
   );
 
+  leaveButton.addEventListener("click", () =>
+    openLeaveChannelModal(channel, channelId)
+  );
+
   welcomeScreen.classList.add("d-none");
   channelInfoPage.classList.remove("d-none");
 
@@ -347,6 +390,7 @@ async function handleSaveChanges(channelId) {
     const response = await apiCall(`channel/${channelId}`, body, "PUT", true);
 
     handleChannelClick(channelId);
+    handleChannelDisplay();
   } catch (error) {
     showErrorModal(error);
   }
@@ -376,4 +420,42 @@ function openEditChannelModal(channel, channelId) {
   uniqueEditChannelModal.show();
 }
 
+function openLeaveChannelModal(channel, channelId) {
+  // Create a unique modal element for this channel
+  const uniqueLeaveChannelModal = new bootstrap.Modal(
+    document.getElementById("leaveChannelModal")
+  );
+
+  const leaveChannelConfirm = document.querySelector("#leaveChannelConfirm");
+  const leaveChannelName = document.getElementById("leaveChannelMessage");
+
+  leaveChannelName.textContent = `Are you sure you want to leave the channel '${channel.name}'`;
+
+  leaveChannelConfirm.addEventListener("click", () => {
+    handleLeaveChannel(channelId);
+    // Close the unique modal after editing
+    uniqueLeaveChannelModal.hide();
+  });
+
+  // Show the unique modal
+  uniqueLeaveChannelModal.show();
+}
+
+function openJoinChannelModal(channelId) {
+  // Create a unique modal element for this channel
+  const uniqueJoinChannelModal = new bootstrap.Modal(
+    document.getElementById("joinChannelModal")
+  );
+
+  const joinChannelConfirm = document.querySelector("#joinChannelConfirm");
+
+  joinChannelConfirm.addEventListener("click", () => {
+    handleJoinChannel(channelId);
+    // Close the unique modal after editing
+    uniqueJoinChannelModal.hide();
+  });
+
+  // Show the unique modal
+  uniqueJoinChannelModal.show();
+}
 ///////////////////////////////////////////////////

@@ -374,3 +374,89 @@
     Leave Channel
   </button>
 </div>
+
+<!-- Leave Channel Modal -->
+<div
+  class="modal fade"
+  id="leaveChannelModal"
+  tabindex="-1"
+  aria-labelledby="leaveChannelModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="leaveChannelLabel">Leave Channel</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" id="leaveChannelMessage"></div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="cancel"
+          data-bs-dismiss="modal"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-danger"
+          id="leaveChannelConfirm"
+          data-bs-dismiss="modal"
+        >
+          Leave Channel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Join Channel Modal -->
+<div
+  class="modal fade"
+  id="joinChannelModal"
+  tabindex="-1"
+  aria-labelledby="joinChannelModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="joinChannelLabel">Join Channel</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body" id="joinChannelMessage">
+        You have not joined this channel. Would you like to join?
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          id="cancel"
+          data-bs-dismiss="modal"
+        >
+          Cancel
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="joinChannelConfirm"
+          data-bs-dismiss="modal"
+        >
+          Join Channel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
