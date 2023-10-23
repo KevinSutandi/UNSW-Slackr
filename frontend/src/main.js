@@ -4,25 +4,31 @@ import {
   handleLogout,
   handleRegister,
   handleCreateChannel,
-} from "./apiCalls.js";
-
-import { showPage, openCreateChannelModal } from "./helpers.js";
+  changeChannelViewWelcome,
+  openCreateChannelModal,
+  showPage,
+  clearLoginForm,
+  clearRegisterForm,
+} from "./functionBank.js";
 
 export let globalToken = null;
 export let globalUserId = null;
 
 function handleRegisterChange() {
   showPage("register-page");
+  clearLoginForm();
 }
 
 function handleLoginChange() {
   showPage("login-page");
+  clearRegisterForm();
 }
 
-function showAppropriatePage() {
+export function showAppropriatePage() {
+  console.log("gg");
   if (isTokenValid()) {
     showPage("main-page");
-    window.addEventListener("load", handleChannelDisplay);
+    handleChannelDisplay();
   } else {
     showPage("login-page");
   }
@@ -49,6 +55,10 @@ document
 document
   .getElementById("createChannelButton")
   .addEventListener("click", handleCreateChannel);
+
+document
+  .getElementById("resetPage")
+  .addEventListener("click", changeChannelViewWelcome);
 
 window.addEventListener("DOMContentLoaded", showAppropriatePage);
 

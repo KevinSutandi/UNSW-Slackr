@@ -11,3 +11,11 @@ html, body {
 main {
     height: 100%;
 }
+
+.bi {
+    width: 1em;
+    height: 1em;
+    display: inline-block;
+    vertical-align: -.125em;
+    fill: currentcolor
+}

@@ -22,16 +22,49 @@
       "password": "!10Ve1no",
       "bio": null,
       "image": null,
-      "sessionActive": false
+      "sessionActive": true
     }
   },
   "channels": {
-    "354383": {
-      "name": "Kevin Test Channel 1",
+    "228915": {
+      "name": "This will change all",
       "creator": 70238,
       "private": false,
-      "description": "This is specifically for testing",
+      "description": "Hellooo",
+      "createdAt": "2023-10-23T05:11:29.113Z",
+      "members": [
+        70238
+      ],
+      "messages": []
+    },
+    "354383": {
+      "name": "Hellooo",
+      "creator": 70238,
+      "private": false,
+      "description": "",
       "createdAt": "2023-10-22T11:56:27.742Z",
+      "members": [
+        70238
+      ],
+      "messages": []
+    },
+    "379570": {
+      "name": "Helloooasdfasdf",
+      "creator": 70238,
+      "private": false,
+      "description": "",
+      "createdAt": "2023-10-23T05:13:12.439Z",
+      "members": [
+        70238
+      ],
+      "messages": []
+    },
+    "382046": {
+      "name": "My name is public",
+      "creator": 70238,
+      "private": false,
+      "description": "",
+      "createdAt": "2023-10-23T05:13:01.757Z",
       "members": [
         70238
       ],
@@ -471,10 +504,10 @@
       ]
     },
     "841296": {
-      "name": "Kevin's Private Channel",
+      "name": "This will change all?",
       "creator": 70238,
       "private": true,
-      "description": "This should be private",
+      "description": "",
       "createdAt": "2023-10-22T12:03:12.393Z",
       "members": [
         70238

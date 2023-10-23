@@ -75,32 +75,3 @@ export const apiCallGet = (path, isAuth = false) => {
       });
   });
 };
-
-export function setTokens(token, userId) {
-  localStorage.setItem("token", token);
-  localStorage.setItem("userId", userId);
-  token;
-}
-
-export function showPage(pageId) {
-  const loginPage = document.getElementById("login-page");
-  const registerPage = document.getElementById("register-page");
-  const mainPage = document.getElementById("main-page");
-  const pages = [loginPage, registerPage, mainPage];
-
-  pages.forEach((page) => {
-    if (page.id === pageId) {
-      page.classList.remove("d-none");
-    } else {
-      page.classList.add("d-none");
-    }
-  });
-}
-
-export function openCreateChannelModal() {
-  const newChannelModal = new bootstrap.Modal(
-    document.getElementById("createChannelModal")
-  );
-
-  newChannelModal.show();
-}
