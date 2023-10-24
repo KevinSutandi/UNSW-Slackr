@@ -269,6 +269,32 @@ function populateChannelsList(channels, targetElement) {
   });
 }
 
+// Function to populate a list of channels in a specified container
+function populateChannelMessages(channel) {
+  const channelItemTemplate = document
+    .querySelector(".channel-message")
+    .cloneNode(true);
+
+  const messages = apiCallGet;
+
+  channels.forEach((channel) => {
+    const channelItem = channel.private
+      ? channelItemPrivateTemplate.cloneNode(true)
+      : channelItemTemplate.cloneNode(true);
+
+    channelItem.classList.remove("d-none");
+    const channelNameElement = channelItem.querySelector("#channelName");
+    channelNameElement.textContent = channel.name;
+
+    // Add a click event listener to each channel item
+    channelItem.addEventListener("click", () => {
+      handleChannelClick(channel.id);
+    });
+
+    channelList.appendChild(channelItem);
+  });
+}
+
 export function changeChannelViewWelcome() {
   const channelInfoPage = document.getElementById("channelInfoPage");
   const welcomeScreen = document.getElementById("welcome-screen");

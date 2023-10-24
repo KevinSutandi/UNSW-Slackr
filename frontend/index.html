@@ -27,7 +27,12 @@
 
   <body>
     <login id="login-page" class="banner px-4 py-5 my-5 text-center">
-      <image class="d-block mx-auto mb-4" src="./logo.jpeg" width="80"></image>
+      <image
+        class="d-block mx-auto mb-4"
+        src="./logo.jpeg"
+        width="80"
+        alt="Slackr Logo"
+      ></image>
       <h1 class="display-5 fw-bold text-light">Welcome to Slackr</h1>
       <h3 class="display-6 fs-6 text-white-50">
         Please enter your email and password to login
@@ -59,7 +64,12 @@
       id="register-page"
       class="banner px-4 py-5 my-5 text-center d-none"
     >
-      <image class="d-block mx-auto mb-4" src="./logo.jpeg" width="80"></image>
+      <image
+        class="d-block mx-auto mb-4"
+        src="./logo.jpeg"
+        width="80"
+        alt="Slackr Logo"
+      ></image>
       <h1 class="display-5 fw-bold text-light">Register to Slackr</h1>
       <div class="mb-1 col-sm-4 mx-auto mt-5 text-start">
         <label for="emailRegisterInput" class="form-label">Email address</label>
@@ -109,7 +119,12 @@
           href="#"
           class="d-flex align-items-center mb-1 mb-md-0 me-md-auto text-white text-decoration-none"
         >
-          <img class="pe-none me-2" src="./logo.jpeg" width="40" />
+          <img
+            class="pe-none me-2"
+            src="./logo.jpeg"
+            width="40"
+            alt="Slackr Logo"
+          />
           <span class="fs-2">Slackr</span>
         </a>
         <hr />
@@ -148,40 +163,58 @@
           Sign out
         </button>
       </div>
-      <div class="px-4 py-5 mx-auto my-auto text-center" id="welcome-screen">
+      <div
+        class="px-4 py-5 mx-auto my-auto text-center d-none"
+        id="welcome-screen"
+      >
         <h1 class="display-7 fw-bold text-body-secondary">Slackr</h1>
         <div class="mx-auto">
           <p class="mb-4 text-secondary">Select a Channel!</p>
         </div>
       </div>
-      <div class="mt-5 mx-5 ps-lg-2 w-100 d-none" id="channelInfoPage">
-        <div class="fs-2 mb-3">
-          <svg
-            id="channelIcon"
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-lock"
-            viewBox="0 0 16 16"
-          >
-            <path
-              id="privateIcon"
-              d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"
-            ></path>
-            <path
-              id="publicIcon"
-              d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
-            />
-          </svg>
-          <h2 id="channelViewName" class="d-inline-block"></h2>
+      <div class="mt-4 mx-5 ps-lg-2 w-100" id="channelInfoPage">
+        <div class="fs-2 d-flex justify-content-between mb-1">
+          <div>
+            <svg
+              id="channelIcon"
+              xmlns="http://www.w3.org/2000/svg"
+              width="16"
+              height="16"
+              fill="currentColor"
+              class="bi bi-lock"
+              viewBox="0 0 16 16"
+            >
+              <path
+                id="privateIcon"
+                d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"
+              ></path>
+              <path
+                id="publicIcon"
+                d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
+              />
+            </svg>
+            <h2 id="channelViewName" class="d-inline-block">Channel Name</h2>
+          </div>
+          <div>
+            <div class="channel-buttons-container"></div>
+          </div>
         </div>
         <span>
-          <p class="text-secondary-emphasis" id="channelViewDescription"></p>
-          <p class="text-secondary" id="channelCreationDate"></p>
-          <p class="text-secondary" id="channelCreator"></p>
+          <p class="text-secondary-emphasis" id="channelViewDescription">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur,
+            optio consequuntur. Iusto, alias quod! Magni totam neque dicta
+            omnis, tenetur necessitatibus delectus atque nesciunt esse excepturi
+            deserunt? Amet, soluta sit?
+          </p>
+          <p class="text-secondary" id="channelCreator">
+            Channel created by: Kevin | October 23, 2023 at 04:11:29 PM
+          </p>
         </span>
-        <div class="channel-buttons-container"></div>
+        <hr />
+
+        <message class="message-container">
+          <h5 class="mb-3">Messages</h5>
+        </message>
       </div>
     </main>
     <script type="module" src="src/main.js"></script>
@@ -448,5 +481,98 @@
         </button>
       </div>
     </div>
+  </div>
+</div>
+
+<!-- Message Template -->
+<div class="d-none channel-message d-flex gap-3">
+  <div>
+    <img
+      id="messageProfilePic"
+      class="rounded-circle"
+      src="default.jpg"
+      style="width: 45px; height: 45px"
+    />
+  </div>
+  <div>
+    <div class="d-flex justify-content-between">
+      <div class="d-flex align-items-center gap-2">
+        <p class="mb-1">Receipient</p>
+        <p style="font-size: 0.75em" class="text-secondary-emphasis mb-1">
+          2 hours ago
+        </p>
+      </div>
+
+      <div class="message-buttons d-flex align-items-center gap-1">
+        <button class="btn p-0 m-1" id="reactButton">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-emoji-smile"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+            />
+            <path
+              d="M4.285 9.567a.5.5 0 0 1 .683.183A3.498 3.498 0 0 0 8 11.5a3.498 3.498 0 0 0 3.032-1.75.5.5 0 1 1 .866.5A4.498 4.498 0 0 1 8 12.5a4.498 4.498 0 0 1-3.898-2.25.5.5 0 0 1 .183-.683zM7 6.5C7 7.328 6.552 8 6 8s-1-.672-1-1.5S5.448 5 6 5s1 .672 1 1.5zm4 0c0 .828-.448 1.5-1 1.5s-1-.672-1-1.5S9.448 5 10 5s1 .672 1 1.5z"
+            />
+          </svg>
+        </button>
+        <button class="btn p-0 m-1" id="pinButton">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-pin-angle"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z"
+            />
+          </svg>
+        </button>
+        <button class="btn p-0 m-1" id="editButton">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-pencil"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
+            />
+          </svg>
+        </button>
+        <button class="btn p-0 m-1" id="deleteMessageButton">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            fill="currentColor"
+            class="bi bi-trash"
+            viewBox="0 0 16 16"
+          >
+            <path
+              d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
+            />
+            <path
+              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
+            />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <p class="fw-light" style="font-size: 0.9em">
+      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa tempora et
+      deserunt laudantium assumenda rerum illo, dolorum laboriosam voluptas
+      animi nostrum? Repellendus incidunt veritatis eius optio accusamus laborum
+      earum mollitia.
+    </p>
   </div>
 </div>
