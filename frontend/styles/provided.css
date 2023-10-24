@@ -19,3 +19,8 @@ main {
     vertical-align: -.125em;
     fill: currentcolor
 }
+
+#message-container-list {
+    max-height: 400px;
+    overflow-y: scroll;
+}

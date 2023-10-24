@@ -163,16 +163,13 @@
           Sign out
         </button>
       </div>
-      <div
-        class="px-4 py-5 mx-auto my-auto text-center d-none"
-        id="welcome-screen"
-      >
+      <div class="px-4 py-5 mx-auto my-auto text-center" id="welcome-screen">
         <h1 class="display-7 fw-bold text-body-secondary">Slackr</h1>
         <div class="mx-auto">
           <p class="mb-4 text-secondary">Select a Channel!</p>
         </div>
       </div>
-      <div class="mt-4 mx-5 ps-lg-2 w-100" id="channelInfoPage">
+      <div class="mt-4 mx-5 ps-lg-2 w-100 d-none" id="channelInfoPage">
         <div class="fs-2 d-flex justify-content-between mb-1">
           <div>
             <svg
@@ -193,22 +190,15 @@
                 d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
               />
             </svg>
-            <h2 id="channelViewName" class="d-inline-block">Channel Name</h2>
+            <h2 id="channelViewName" class="d-inline-block"></h2>
           </div>
           <div>
             <div class="channel-buttons-container"></div>
           </div>
         </div>
         <span>
-          <p class="text-secondary-emphasis" id="channelViewDescription">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Aspernatur,
-            optio consequuntur. Iusto, alias quod! Magni totam neque dicta
-            omnis, tenetur necessitatibus delectus atque nesciunt esse excepturi
-            deserunt? Amet, soluta sit?
-          </p>
-          <p class="text-secondary" id="channelCreator">
-            Channel created by: Kevin | October 23, 2023 at 04:11:29 PM
-          </p>
+          <p class="text-secondary-emphasis" id="channelViewDescription"></p>
+          <p class="text-secondary" id="channelCreator"></p>
         </span>
         <hr />
 
@@ -486,7 +476,7 @@
 </div>
 
 <!-- Message Template -->
-<div class="d-none channel-message d-flex gap-3">
+<div class="d-none channel-message d-flex gap-3 w-100">
   <div>
     <img
       id="messageProfilePic"
@@ -495,7 +485,7 @@
       style="width: 45px; height: 45px"
     />
   </div>
-  <div>
+  <div class="w-100">
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center gap-2">
         <p class="mb-1" id="receipientName">Receipient</p>

@@ -270,34 +270,94 @@ function populateChannelsList(channels, targetElement) {
 }
 
 // Function to populate a list of channels in a specified container
-function populateChannelMessages(channel, channelId) {
+async function populateChannelMessages(channel, channelId) {
   const channelItemTemplate = document
     .querySelector(".channel-message")
     .cloneNode(true);
 
-  // Assuming that your `apiCallGet` function accepts the URL
-  // as the first argument, you can construct the URL like this:
-  const url = `message/${channelId}?start=0`;
+  const container = document.getElementById("message-container-list");
+  let start = 0; // Initial message index
 
-  // Call the API to get messages for the specific channel
-  apiCallGet(url, true)
-    .then((response) => {
-      const messages = response.messages;
-      // Get the container where you want to append the messages
-      const container = document.getElementById("message-container-list");
+  container.addEventListener("scroll", async function () {
+    if (container.scrollTop === 0) {
+      // User has scrolled to the top
 
-      // Process the retrieved messages and populate your template
-      messages.forEach((message) => {
+      try {
+        // Load the next set of messages (e.g., the next 25 messages)
+        const url = `message/${channelId}?start=${start + 25}`;
+        const response = await apiCallGet(url, true);
+        console.log(response);
+        const newMessages = response.messages;
+
+        if (newMessages.length > 0) {
+          // Calculate the height of the newly inserted messages
+          let newMessagesHeight = 0;
+
+          for (let message of newMessages) {
+            try {
+              // Get Sender Data
+              const userDetails = await apiCallGet(
+                `user/${parseInt(message.sender)}`,
+                true
+              );
+              const timeFormatted = formatTimeDifference(message.sentAt);
+
+              // Clone the template and modify its content
+              const messageItem = channelItemTemplate.cloneNode(true);
+              messageItem.querySelector("#receipientName").textContent =
+                userDetails.name;
+              messageItem.querySelector("#timeSent").textContent =
+                timeFormatted;
+              messageItem.querySelector("#messageBody").textContent =
+                message.message;
+
+              messageItem.classList.remove("d-none");
+
+              // Append the message to the container at the top
+              container.insertBefore(messageItem, container.firstChild);
+
+              // Calculate the height of the newly added message
+              newMessagesHeight += messageItem.clientHeight;
+            } catch (userError) {
+              // Handle errors when fetching user details
+              showErrorModal(userError);
+            }
+          }
+
+          // Update the start index
+          start += newMessages.length;
+
+          // Adjust the scroll position to maintain the user's position
+          container.scrollTop = newMessagesHeight;
+        }
+      } catch (error) {
+        // Handle any errors that occur during the API call
+        showErrorModal(error);
+      }
+    }
+  });
+  await loadMessages(channelId, start, channelItemTemplate, container);
+}
+
+// Function to load messages and append them to the container
+async function loadMessages(channelId, start, template, container) {
+  try {
+    const url = `message/${channelId}?start=${start}`;
+    const response = await apiCallGet(url, true);
+    const messages = response.messages;
+
+    // Process and append messages to the container
+    for (const message of messages) {
+      try {
         // Get Sender Data
-        const userDetails = apiCallGet(
+        const userDetails = await apiCallGet(
           `user/${parseInt(message.sender)}`,
           true
         );
-
         const timeFormatted = formatTimeDifference(message.sentAt);
 
         // Clone the template and modify its content
-        const messageItem = channelItemTemplate.cloneNode(true);
+        const messageItem = template.cloneNode(true);
         messageItem.querySelector("#receipientName").textContent =
           userDetails.name;
         messageItem.querySelector("#timeSent").textContent = timeFormatted;
@@ -307,12 +367,22 @@ function populateChannelMessages(channel, channelId) {
 
         // Append the message to the container
         container.appendChild(messageItem);
-      });
-    })
-    .catch((error) => {
-      // Handle any errors that occur during the API call
-      showErrorModal(error);
-    });
+      } catch (userError) {
+        // Handle errors when fetching user details
+        console.error("Error fetching user details:", userError);
+      }
+    }
+
+    scrollToBottom();
+  } catch (error) {
+    // Handle any errors that occur during the API call
+    showErrorModal(error);
+  }
+}
+
+function scrollToBottom() {
+  const container = document.getElementById("message-container-list");
+  container.scrollTop = container.scrollHeight;
 }
 
 function formatTimeDifference(timestamp) {
