@@ -270,29 +270,68 @@ function populateChannelsList(channels, targetElement) {
 }
 
 // Function to populate a list of channels in a specified container
-function populateChannelMessages(channel) {
+function populateChannelMessages(channel, channelId) {
   const channelItemTemplate = document
     .querySelector(".channel-message")
     .cloneNode(true);
 
-  const messages = apiCallGet;
+  // Assuming that your `apiCallGet` function accepts the URL
+  // as the first argument, you can construct the URL like this:
+  const url = `message/${channelId}?start=0`;
 
-  channels.forEach((channel) => {
-    const channelItem = channel.private
-      ? channelItemPrivateTemplate.cloneNode(true)
-      : channelItemTemplate.cloneNode(true);
+  // Call the API to get messages for the specific channel
+  apiCallGet(url, true)
+    .then((response) => {
+      const messages = response.messages;
+      // Get the container where you want to append the messages
+      const container = document.getElementById("message-container-list");
 
-    channelItem.classList.remove("d-none");
-    const channelNameElement = channelItem.querySelector("#channelName");
-    channelNameElement.textContent = channel.name;
+      // Process the retrieved messages and populate your template
+      messages.forEach((message) => {
+        // Get Sender Data
+        const userDetails = apiCallGet(
+          `user/${parseInt(message.sender)}`,
+          true
+        );
 
-    // Add a click event listener to each channel item
-    channelItem.addEventListener("click", () => {
-      handleChannelClick(channel.id);
+        const timeFormatted = formatTimeDifference(message.sentAt);
+
+        // Clone the template and modify its content
+        const messageItem = channelItemTemplate.cloneNode(true);
+        messageItem.querySelector("#receipientName").textContent =
+          userDetails.name;
+        messageItem.querySelector("#timeSent").textContent = timeFormatted;
+        messageItem.querySelector("#messageBody").textContent = message.message;
+
+        messageItem.classList.remove("d-none");
+
+        // Append the message to the container
+        container.appendChild(messageItem);
+      });
+    })
+    .catch((error) => {
+      // Handle any errors that occur during the API call
+      showErrorModal(error);
     });
+}
 
-    channelList.appendChild(channelItem);
-  });
+function formatTimeDifference(timestamp) {
+  const now = new Date();
+  const messageTime = new Date(timestamp);
+  const timeDifference = now - messageTime;
+
+  if (timeDifference < 60 * 1000) {
+    return "just now";
+  } else if (timeDifference < 60 * 60 * 1000) {
+    const minutes = Math.floor(timeDifference / (60 * 1000));
+    return `${minutes} minute${minutes > 1 ? "s" : ""} ago`;
+  } else if (timeDifference < 24 * 60 * 60 * 1000) {
+    const hours = Math.floor(timeDifference / (60 * 60 * 1000));
+    return `${hours} hour${hours > 1 ? "s" : ""} ago`;
+  } else {
+    const days = Math.floor(timeDifference / (24 * 60 * 60 * 1000));
+    return `${days} day${days > 1 ? "s" : ""} ago`;
+  }
 }
 
 export function changeChannelViewWelcome() {
@@ -367,6 +406,8 @@ export async function changeChannelViewPage(channel, channelId) {
 
     privateIcon.style.display = channel.private ? "inline-block" : "none";
     publicIcon.style.display = channel.private ? "none" : "inline-block";
+
+    populateChannelMessages(channel, channelId);
   } catch (error) {
     showErrorModal(error);
   }

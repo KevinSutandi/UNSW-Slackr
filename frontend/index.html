@@ -214,6 +214,7 @@
 
         <message class="message-container">
           <h5 class="mb-3">Messages</h5>
+          <div id="message-container-list"></div>
         </message>
       </div>
     </main>
@@ -497,8 +498,12 @@
   <div>
     <div class="d-flex justify-content-between">
       <div class="d-flex align-items-center gap-2">
-        <p class="mb-1">Receipient</p>
-        <p style="font-size: 0.75em" class="text-secondary-emphasis mb-1">
+        <p class="mb-1" id="receipientName">Receipient</p>
+        <p
+          style="font-size: 0.75em"
+          class="text-secondary-emphasis mb-1"
+          id="timeSent"
+        >
           2 hours ago
         </p>
       </div>
@@ -568,7 +573,7 @@
         </button>
       </div>
     </div>
-    <p class="fw-light" style="font-size: 0.9em">
+    <p class="fw-light" style="font-size: 0.9em" id="messageBody">
       Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa tempora et
       deserunt laudantium assumenda rerum illo, dolorum laboriosam voluptas
       animi nostrum? Repellendus incidunt veritatis eius optio accusamus laborum
