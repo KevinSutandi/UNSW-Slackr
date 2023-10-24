@@ -107,7 +107,6 @@ export const handleChannelDisplay = async () => {
     clearChannelContainer("publicChannelContainer");
 
     // Populate the channel lists
-    console.log(publicChannels);
     populateChannelsList(joinedChannels, "joinedChannelContainer");
     populateChannelsList(publicChannels, "publicChannelContainer");
   } catch (error) {
@@ -117,7 +116,6 @@ export const handleChannelDisplay = async () => {
 
 // Event handler for when a channel is clicked
 export function handleChannelClick(channelId) {
-  console.log(channelId);
   apiCallGet(`channel/${channelId}`, true)
     .then((response) => {
       changeChannelViewPage(response, channelId);
@@ -260,7 +258,6 @@ function populateChannelsList(channels, targetElement) {
 
     channelItem.classList.remove("d-none");
     const channelNameElement = channelItem.querySelector("#channelName");
-    console.log(channelNameElement.value);
     channelNameElement.textContent = channel.name;
 
     // Add a click event listener to each channel item
@@ -387,7 +384,7 @@ async function handleSaveChanges(channelId) {
     };
 
     // Call the API to update the channel data
-    const response = await apiCall(`channel/${channelId}`, body, "PUT", true);
+    await apiCall(`channel/${channelId}`, body, "PUT", true);
 
     handleChannelClick(channelId);
     handleChannelDisplay();
@@ -406,15 +403,19 @@ function openEditChannelModal(channel, channelId) {
   const editChannelNameInput = document.querySelector("#editChannelName");
   const editChannelDescInput = document.querySelector("#editDescription");
 
-  // Set the input field with the channel name
+  // Set the input fields with the channel's name and description
   editChannelNameInput.value = channel.name;
   editChannelDescInput.value = channel.description;
 
-  editChannelSaveChanges.addEventListener("click", () => {
+  function saveChangesAndClose() {
     handleSaveChanges(channelId);
     // Close the unique modal after editing
     uniqueEditChannelModal.hide();
-  });
+    // Remove the event listener to avoid double-triggering
+    editChannelSaveChanges.removeEventListener("click", saveChangesAndClose);
+  }
+
+  editChannelSaveChanges.addEventListener("click", saveChangesAndClose);
 
   // Show the unique modal
   uniqueEditChannelModal.show();
@@ -431,11 +432,15 @@ function openLeaveChannelModal(channel, channelId) {
 
   leaveChannelName.textContent = `Are you sure you want to leave the channel '${channel.name}'`;
 
-  leaveChannelConfirm.addEventListener("click", () => {
+  function confirmAndLeave() {
     handleLeaveChannel(channelId);
-    // Close the unique modal after editing
+    // Close the unique modal after
     uniqueLeaveChannelModal.hide();
-  });
+    // Remove the event listener to avoid double-triggering
+    leaveChannelConfirm.removeEventListener("click", confirmAndLeave);
+  }
+
+  leaveChannelConfirm.addEventListener("click", confirmAndLeave);
 
   // Show the unique modal
   uniqueLeaveChannelModal.show();
@@ -449,13 +454,17 @@ function openJoinChannelModal(channelId) {
 
   const joinChannelConfirm = document.querySelector("#joinChannelConfirm");
 
-  joinChannelConfirm.addEventListener("click", () => {
+  function confirmAndJoin() {
     handleJoinChannel(channelId);
-    // Close the unique modal after editing
+    // Close the unique modal after
     uniqueJoinChannelModal.hide();
-  });
+    // Remove the event listener to avoid double-triggering
+    joinChannelConfirm.removeEventListener("click", confirmAndJoin);
+  }
+  joinChannelConfirm.addEventListener("click", confirmAndJoin);
 
   // Show the unique modal
   uniqueJoinChannelModal.show();
 }
+
 ///////////////////////////////////////////////////
