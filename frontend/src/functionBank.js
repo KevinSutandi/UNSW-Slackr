@@ -279,18 +279,16 @@ async function populateChannelMessages(channel, channelId) {
   let start = 0; // Initial message index
 
   container.addEventListener("scroll", async function () {
+    // When scroll reaches top
     if (container.scrollTop === 0) {
-      // User has scrolled to the top
-
       try {
-        // Load the next set of messages (e.g., the next 25 messages)
         const url = `message/${channelId}?start=${start + 25}`;
         const response = await apiCallGet(url, true);
         console.log(response);
         const newMessages = response.messages;
 
         if (newMessages.length > 0) {
-          // Calculate the height of the newly inserted messages
+          // For Smooth Scrolling
           let newMessagesHeight = 0;
 
           for (let message of newMessages) {
@@ -327,8 +325,11 @@ async function populateChannelMessages(channel, channelId) {
           // Update the start index
           start += newMessages.length;
 
-          // Adjust the scroll position to maintain the user's position
-          container.scrollTop = newMessagesHeight;
+          // Smoothly scroll to the new position to maintain the user's position
+          container.scrollTo({
+            top: newMessagesHeight,
+            behavior: "instant",
+          });
         }
       } catch (error) {
         // Handle any errors that occur during the API call
