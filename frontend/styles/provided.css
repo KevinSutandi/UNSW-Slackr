@@ -20,9 +20,23 @@ main {
     fill: currentcolor
 }
 
+.message-container {
+    flex: 1; /* Allow the message container to take the remaining space */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end; /* Move the messageSender to the bottom */
+    overflow: hidden; /* Hide overflow to prevent scrollbars in message-container */
+  }
+
+  .message-container-list {
+    flex: 1; /* Allow the message list to take all available vertical space */
+    overflow-y: auto; /* Add vertical scrollbar if needed */
+  }
+  
+
 #message-container-list {
-    max-height: 70%;
-    overflow-y: scroll;
+    max-height: 100vh;
+    overflow-y: auto;
 }
 
 .loading-indicator {

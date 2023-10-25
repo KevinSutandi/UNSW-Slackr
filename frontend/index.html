@@ -169,7 +169,10 @@
           <p class="mb-4 text-secondary">Select a Channel!</p>
         </div>
       </div>
-      <div class="mt-4 mx-5 ps-lg-2 w-100 d-none" id="channelInfoPage">
+      <div
+        class="mt-4 mx-5 ps-lg-2 w-100 d-flex flex-column d-none"
+        id="channelInfoPage"
+      >
         <div class="fs-2 d-flex justify-content-between mb-1">
           <div>
             <svg
@@ -196,21 +199,47 @@
             <div class="channel-buttons-container"></div>
           </div>
         </div>
-        <span>
+        <div>
           <p class="text-secondary-emphasis" id="channelViewDescription"></p>
           <p class="text-secondary" id="channelCreator"></p>
-        </span>
+        </div>
         <hr />
-
         <message class="message-container">
           <h5 class="mb-3">Messages</h5>
+          <div class="message-container-list" id="message-container-list"></div>
           <div id="loading-indicator" class="loading-indicator">
             <div class="spinner-border text-primary" role="status">
               <span class="visually-hidden">Loading...</span>
             </div>
             <p>Loading more messages...</p>
           </div>
-          <div id="message-container-list"></div>
+          <div class="input-group my-3">
+            <input
+              type="text"
+              class="form-control"
+              placeholder="Type a message"
+              aria-label="Type a message"
+              aria-describedby="basic-addon1"
+            />
+            <button
+              class="btn btn-outline-secondary input-group-text"
+              id="basic-addon1"
+            >
+              Send Message &nbsp;
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                fill="currentColor"
+                class="bi bi-send"
+                viewBox="0 0 16 16"
+              >
+                <path
+                  d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"
+                ></path>
+              </svg>
+            </button>
+          </div>
         </message>
       </div>
     </main>

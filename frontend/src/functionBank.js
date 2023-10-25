@@ -284,6 +284,7 @@ function clearChannelMessages() {
 
 // Function to populate a list of channels in a specified container
 async function populateChannelMessages(channel, channelId) {
+  console.log(channelId);
   const channelItemTemplate = document
     .querySelector(".channel-message")
     .cloneNode(true);
@@ -292,9 +293,15 @@ async function populateChannelMessages(channel, channelId) {
   const loadingIndicator = document.getElementById("loading-indicator"); // Add this line
   let start = 0; // Initial message index
 
-  container.addEventListener("scroll", async function () {
+  // Remove the event listener for the old channel
+  if (container.scrollHandler) {
+    container.removeEventListener("scroll", container.scrollHandler);
+  }
+
+  async function handleScroll(event) {
     // When scroll reaches top
     if (container.scrollTop === 0) {
+      console.log("yurr");
       try {
         // Show the loading indicator while fetching new messages
         loadingIndicator.style.display = "block"; // Show the loading element
@@ -307,7 +314,7 @@ async function populateChannelMessages(channel, channelId) {
           // For Smooth Scrolling
           let newMessagesHeight = 0;
 
-          for (let message of newMessages) {
+          for (const message of newMessages) {
             try {
               // Get Sender Data
               const userDetails = await apiCallGet(
@@ -355,7 +362,11 @@ async function populateChannelMessages(channel, channelId) {
         showErrorModal(error);
       }
     }
-  });
+  }
+
+  container.scrollHandler = handleScroll;
+
+  container.addEventListener("scroll", container.scrollHandler);
   await loadMessages(channelId, start, channelItemTemplate, container);
 }
 
@@ -580,6 +591,13 @@ function openEditChannelModal(channel, channelId) {
     editChannelSaveChanges.removeEventListener("click", saveChangesAndClose);
   }
 
+  // Listen for the "keydown" event on the document
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      confirmCancelSave();
+    }
+  });
+
   editChannelSaveChanges.addEventListener("click", saveChangesAndClose);
 
   // Show the unique modal
@@ -615,6 +633,13 @@ function openLeaveChannelModal(channel, channelId) {
     button.addEventListener("click", confirmNotLeave);
   });
 
+  // Listen for the "keydown" event on the document
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      confirmNotLeave();
+    }
+  });
+
   leaveChannelConfirm.addEventListener("click", confirmAndLeave);
 
   // Show the unique modal
@@ -632,9 +657,7 @@ function openJoinChannelModal(channelId) {
 
   function confirmAndJoin() {
     handleJoinChannel(channelId);
-    // Close the unique modal after
     uniqueJoinChannelModal.hide();
-    // Remove the event listener to avoid double-triggering
     joinChannelConfirm.removeEventListener("click", confirmAndJoin);
   }
 
@@ -645,6 +668,12 @@ function openJoinChannelModal(channelId) {
 
   cancelConfirm.forEach((button) => {
     button.addEventListener("click", confirmNotJoin);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      confirmNotJoin();
+    }
   });
 
   joinChannelConfirm.addEventListener("click", confirmAndJoin);

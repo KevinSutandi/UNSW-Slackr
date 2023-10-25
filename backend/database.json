@@ -32,14 +32,16 @@
       "private": false,
       "description": "",
       "createdAt": "2023-10-25T06:40:04.647Z",
-      "members": [],
+      "members": [
+        70238
+      ],
       "messages": []
     },
     "228915": {
-      "name": "yurr",
+      "name": "Kvein's other shack",
       "creator": 70238,
       "private": false,
-      "description": "I want this to be different",
+      "description": "asdfasdfasf",
       "createdAt": "2023-10-23T05:11:29.113Z",
       "members": [
         70238
@@ -47,10 +49,10 @@
       "messages": []
     },
     "354383": {
-      "name": "Hellooo",
+      "name": "Kevin's Shack",
       "creator": 70238,
       "private": false,
-      "description": "",
+      "description": "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum",
       "createdAt": "2023-10-22T11:56:27.742Z",
       "members": [
         70238
@@ -94,7 +96,7 @@
       "messages": []
     },
     "813580": {
-      "name": "public channel",
+      "name": "public channelss",
       "creator": 15272,
       "private": false,
       "description": "This would be the description in hereasdf",
