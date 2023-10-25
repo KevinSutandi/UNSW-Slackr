@@ -26,75 +26,6 @@
     }
   },
   "channels": {
-    "184487": {
-      "name": "yurrrrrr",
-      "creator": 70238,
-      "private": false,
-      "description": "",
-      "createdAt": "2023-10-25T06:40:04.647Z",
-      "members": [
-        70238
-      ],
-      "messages": []
-    },
-    "228915": {
-      "name": "Kvein's other shack",
-      "creator": 70238,
-      "private": false,
-      "description": "asdfasdfasf",
-      "createdAt": "2023-10-23T05:11:29.113Z",
-      "members": [
-        70238
-      ],
-      "messages": []
-    },
-    "354383": {
-      "name": "Kevin's Shack",
-      "creator": 70238,
-      "private": false,
-      "description": "lorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsumlorem ipsum",
-      "createdAt": "2023-10-22T11:56:27.742Z",
-      "members": [
-        70238
-      ],
-      "messages": []
-    },
-    "379570": {
-      "name": "public channel",
-      "creator": 70238,
-      "private": false,
-      "description": "This would be the description in hereasdf",
-      "createdAt": "2023-10-23T05:13:12.439Z",
-      "members": [],
-      "messages": []
-    },
-    "382046": {
-      "name": "My name is public",
-      "creator": 70238,
-      "private": false,
-      "description": "",
-      "createdAt": "2023-10-23T05:13:01.757Z",
-      "members": [],
-      "messages": []
-    },
-    "445862": {
-      "name": "yurr",
-      "creator": 70238,
-      "private": false,
-      "description": "",
-      "createdAt": "2023-10-23T13:02:58.325Z",
-      "members": [],
-      "messages": []
-    },
-    "552010": {
-      "name": "Burr",
-      "creator": 70238,
-      "private": false,
-      "description": "",
-      "createdAt": "2023-10-23T13:00:59.227Z",
-      "members": [],
-      "messages": []
-    },
     "813580": {
       "name": "public channelss",
       "creator": 15272,
@@ -528,15 +459,6 @@
           "reacts": []
         }
       ]
-    },
-    "841296": {
-      "name": "THIS IS PRIVATEEE",
-      "creator": 70238,
-      "private": true,
-      "description": "weewooweewoo",
-      "createdAt": "2023-10-22T12:03:12.393Z",
-      "members": [],
-      "messages": []
     }
   },
   "nextMessageId": 43
