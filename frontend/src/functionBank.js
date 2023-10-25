@@ -335,12 +335,25 @@ async function populateChannelMessages(channelId) {
               const timeFormatted = formatTimeDifference(message.sentAt);
               // Clone the template and modify its content
               const messageItem = channelItemTemplate.cloneNode(true);
+              const deleteMessageButton = document.getElementById(
+                "deleteMessageButton"
+              );
+              messageItem.id = `${message.id}`;
               messageItem.querySelector("#receipientName").textContent =
                 userDetails.name;
               messageItem.querySelector("#timeSent").textContent =
                 timeFormatted;
               messageItem.querySelector("#messageBody").textContent =
                 message.message;
+
+              // Add a click event listener
+              deleteMessageButton.addEventListener("click", function () {
+                // Handle the delete message action here
+                const messageId = message.id; // Get the message ID
+                // Call a function to delete the message, passing the messageId
+                // TODO: handleDeleteMessage(channelId, messageId);
+              });
+
               messageItem.classList.remove("d-none");
               // Append the message to the container at the top
               container.insertBefore(messageItem, container.firstChild);
@@ -384,7 +397,6 @@ async function loadMessages(channelId, template, container) {
 
     // Process and append messages to the container
     for (const message of messages) {
-      console.log(message.id);
       try {
         // Get Sender Data
         const userDetails = await apiCallGet(
@@ -395,6 +407,7 @@ async function loadMessages(channelId, template, container) {
 
         // Clone the template and modify its content
         const messageItem = template.cloneNode(true);
+        messageItem.id = `${message.id}`;
         messageItem.querySelector("#receipientName").textContent =
           userDetails.name;
         messageItem.querySelector("#timeSent").textContent = timeFormatted;
