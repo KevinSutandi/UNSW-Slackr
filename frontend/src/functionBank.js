@@ -171,15 +171,31 @@ async function handleLeaveChannel(channelId) {
 async function handleJoinChannel(channelId) {
   try {
     // Call the API to update the channel data
-    const response = await apiCall(
-      `channel/${channelId}/join`,
-      {},
-      "POST",
-      true
-    );
+    await apiCall(`channel/${channelId}/join`, {}, "POST", true);
 
     handleChannelClick(channelId);
     handleChannelDisplay();
+  } catch (error) {
+    showErrorModal(error);
+  }
+}
+
+async function handleSendMessage(channelId, message, textBox) {
+  try {
+    if (message.trim() === "") {
+      throw Error("Message cannot be empty");
+    }
+
+    const body = {
+      message: message,
+    };
+
+    await apiCall(`message/${channelId}`, body, "POST", true);
+
+    textBox.value = "";
+
+    populateChannelMessages(channelId);
+    scrollToBottom();
   } catch (error) {
     showErrorModal(error);
   }
@@ -283,38 +299,33 @@ function clearChannelMessages() {
 }
 
 // Function to populate a list of channels in a specified container
-async function populateChannelMessages(channel, channelId) {
-  console.log(channelId);
+async function populateChannelMessages(channelId) {
   const channelItemTemplate = document
     .querySelector(".channel-message")
     .cloneNode(true);
-
   const container = document.getElementById("message-container-list");
   const loadingIndicator = document.getElementById("loading-indicator"); // Add this line
   let start = 0; // Initial message index
+  let initLoad = false;
 
   // Remove the event listener for the old channel
   if (container.scrollHandler) {
     container.removeEventListener("scroll", container.scrollHandler);
   }
-
   async function handleScroll(event) {
     // When scroll reaches top
-    if (container.scrollTop === 0) {
-      console.log("yurr");
+    if (container.scrollTop === 0 && initLoad === true) {
       try {
         // Show the loading indicator while fetching new messages
         loadingIndicator.style.display = "block"; // Show the loading element
-
         const url = `message/${channelId}?start=${start + 25}`;
         const response = await apiCallGet(url, true);
         const newMessages = response.messages;
-
         if (newMessages.length > 0) {
           // For Smooth Scrolling
           let newMessagesHeight = 0;
-
           for (const message of newMessages) {
+            console.log(message.id);
             try {
               // Get Sender Data
               const userDetails = await apiCallGet(
@@ -322,7 +333,6 @@ async function populateChannelMessages(channel, channelId) {
                 true
               );
               const timeFormatted = formatTimeDifference(message.sentAt);
-
               // Clone the template and modify its content
               const messageItem = channelItemTemplate.cloneNode(true);
               messageItem.querySelector("#receipientName").textContent =
@@ -331,12 +341,9 @@ async function populateChannelMessages(channel, channelId) {
                 timeFormatted;
               messageItem.querySelector("#messageBody").textContent =
                 message.message;
-
               messageItem.classList.remove("d-none");
-
               // Append the message to the container at the top
               container.insertBefore(messageItem, container.firstChild);
-
               // Calculate the height of the newly added message
               newMessagesHeight += messageItem.clientHeight;
             } catch (userError) {
@@ -344,17 +351,14 @@ async function populateChannelMessages(channel, channelId) {
               showErrorModal(userError);
             }
           }
-
           // Update the start index
           start += newMessages.length;
-
           // Smoothly scroll to the new position to maintain the user's position
           container.scrollTo({
             top: newMessagesHeight,
             behavior: "instant",
           });
         }
-
         // Hide the loading indicator after messages are loaded
         loadingIndicator.style.display = "none"; // Hide the loading element
       } catch (error) {
@@ -363,24 +367,24 @@ async function populateChannelMessages(channel, channelId) {
       }
     }
   }
-
   container.scrollHandler = handleScroll;
-
   container.addEventListener("scroll", container.scrollHandler);
-  await loadMessages(channelId, start, channelItemTemplate, container);
+
+  await loadMessages(channelId, channelItemTemplate, container);
+  initLoad = true;
 }
 
 // Function to load messages and append them to the container
-async function loadMessages(channelId, start, template, container) {
+async function loadMessages(channelId, template, container) {
   try {
     clearChannelMessages();
-    console.log("first");
-    const url = `message/${channelId}?start=${start}`;
+    const url = `message/${channelId}?start=0`;
     const response = await apiCallGet(url, true);
-    const messages = response.messages;
+    const messages = response.messages.reverse();
 
     // Process and append messages to the container
     for (const message of messages) {
+      console.log(message.id);
       try {
         // Get Sender Data
         const userDetails = await apiCallGet(
@@ -456,6 +460,8 @@ export async function changeChannelViewPage(channel, channelId) {
   const channelCreationDetails = document.getElementById("channelCreator");
   const privateIcon = document.getElementById("privateIcon");
   const publicIcon = document.getElementById("publicIcon");
+  const messageSend = document.getElementById("messageTextSend");
+  const messageSendInput = document.getElementById("messageTextInput");
 
   const channelButtonTemplate = document
     .querySelector(".channel-buttons")
@@ -467,6 +473,34 @@ export async function changeChannelViewPage(channel, channelId) {
   const editButton = channelButtonTemplate.querySelector("#editChannel");
   const leaveButton = channelButtonTemplate.querySelector("#leaveChannel");
 
+  if (messageSend.handleSend) {
+    console.log("removed");
+    messageSend.removeEventListener("click", messageSend.handleSend);
+  }
+
+  if (messageSendInput.handleEnter) {
+    messageSendInput.removeEventListener(
+      "keydown",
+      messageSendInput.handleEnter
+    );
+  }
+
+  const handleSend = () => {
+    handleSendMessage(channelId, messageSendInput.value, messageSendInput);
+  };
+
+  messageSend.handleSend = handleSend;
+
+  messageSendInput.handleEnter = function (event) {
+    if (event.key === "Enter") {
+      // Prevent the default behavior of the enter key
+      event.preventDefault();
+
+      // Trigger the handleSend function here
+      handleSend();
+    }
+  };
+
   editButton.addEventListener("click", () =>
     openEditChannelModal(channel, channelId)
   );
@@ -474,6 +508,10 @@ export async function changeChannelViewPage(channel, channelId) {
   leaveButton.addEventListener("click", () =>
     openLeaveChannelModal(channel, channelId)
   );
+
+  messageSend.addEventListener("click", messageSend.handleSend);
+
+  messageSendInput.addEventListener("keydown", messageSendInput.handleEnter);
 
   welcomeScreen.classList.add("d-none");
   channelInfoPage.classList.remove("d-none");
@@ -510,7 +548,7 @@ export async function changeChannelViewPage(channel, channelId) {
     privateIcon.style.display = channel.private ? "inline-block" : "none";
     publicIcon.style.display = channel.private ? "none" : "inline-block";
 
-    populateChannelMessages(channel, channelId);
+    populateChannelMessages(channelId);
   } catch (error) {
     showErrorModal(error);
   }
@@ -597,6 +635,8 @@ function openEditChannelModal(channel, channelId) {
       confirmCancelSave();
     }
   });
+
+  cancelConfirm.addEventListener("click", confirmCancelSave);
 
   editChannelSaveChanges.addEventListener("click", saveChangesAndClose);
 

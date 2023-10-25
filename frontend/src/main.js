@@ -25,7 +25,6 @@ function handleLoginChange() {
 }
 
 export function showAppropriatePage() {
-  console.log("gg");
   if (isTokenValid()) {
     showPage("main-page");
     handleChannelDisplay();
