@@ -30,12 +30,22 @@
       "name": "Check Messages",
       "creator": 70238,
       "private": false,
-      "description": "",
+      "description": "yurrfffasdfasdf",
       "createdAt": "2023-10-25T13:16:10.024Z",
       "members": [
         70238
       ],
       "messages": [
+        {
+          "id": 212,
+          "message": "asdfasdf",
+          "sender": 70238,
+          "sentAt": "2023-10-25T14:40:12.031Z",
+          "edited": false,
+          "editedAt": null,
+          "pinned": false,
+          "reacts": []
+        },
         {
           "id": 210,
           "message": "asdfasdfasdfasf",
@@ -2163,5 +2173,5 @@
       ]
     }
   },
-  "nextMessageId": 212
+  "nextMessageId": 213
 }
