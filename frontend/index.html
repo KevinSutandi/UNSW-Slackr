@@ -204,6 +204,12 @@
 
         <message class="message-container">
           <h5 class="mb-3">Messages</h5>
+          <div id="loading-indicator" class="loading-indicator">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+            <p>Loading more messages...</p>
+          </div>
           <div id="message-container-list"></div>
         </message>
       </div>
@@ -310,8 +316,7 @@
         <h1 class="modal-title fs-5" id="editChannelLabel">Edit Channel</h1>
         <button
           type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
+          class="btn-close cancel-edit"
           aria-label="Close"
         ></button>
       </div>
@@ -408,19 +413,13 @@
         <h1 class="modal-title fs-5" id="leaveChannelLabel">Leave Channel</h1>
         <button
           type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
+          class="btn-close cancel-leave"
           aria-label="Close"
         ></button>
       </div>
       <div class="modal-body" id="leaveChannelMessage"></div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          id="cancel"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-secondary cancel-leave">
           Cancel
         </button>
         <button type="button" class="btn btn-danger" id="leaveChannelConfirm">
@@ -445,8 +444,7 @@
         <h1 class="modal-title fs-5" id="joinChannelLabel">Join Channel</h1>
         <button
           type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
+          class="btn-close cancel-join"
           aria-label="Close"
         ></button>
       </div>
@@ -454,12 +452,7 @@
         You have not joined this channel. Would you like to join?
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-secondary"
-          id="cancel"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-secondary cancel-join">
           Cancel
         </button>
         <button

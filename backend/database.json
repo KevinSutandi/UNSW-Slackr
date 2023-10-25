@@ -26,13 +26,24 @@
     }
   },
   "channels": {
-    "228915": {
-      "name": "This will change allaaa",
+    "184487": {
+      "name": "yurrrrrr",
       "creator": 70238,
       "private": false,
-      "description": "Hellooo",
-      "createdAt": "2023-10-23T05:11:29.113Z",
+      "description": "",
+      "createdAt": "2023-10-25T06:40:04.647Z",
       "members": [],
+      "messages": []
+    },
+    "228915": {
+      "name": "yurr",
+      "creator": 70238,
+      "private": false,
+      "description": "I want this to be different",
+      "createdAt": "2023-10-23T05:11:29.113Z",
+      "members": [
+        70238
+      ],
       "messages": []
     },
     "354383": {
@@ -41,14 +52,16 @@
       "private": false,
       "description": "",
       "createdAt": "2023-10-22T11:56:27.742Z",
-      "members": [],
+      "members": [
+        70238
+      ],
       "messages": []
     },
     "379570": {
-      "name": "Helloooasdfasdf",
+      "name": "public channel",
       "creator": 70238,
       "private": false,
-      "description": "",
+      "description": "This would be the description in hereasdf",
       "createdAt": "2023-10-23T05:13:12.439Z",
       "members": [],
       "messages": []
@@ -84,7 +97,7 @@
       "name": "public channel",
       "creator": 15272,
       "private": false,
-      "description": "This would be the description in here",
+      "description": "This would be the description in hereasdf",
       "createdAt": "2021-09-13T08:00:03.220Z",
       "members": [
         15272,

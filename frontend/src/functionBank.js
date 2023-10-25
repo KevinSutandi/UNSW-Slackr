@@ -269,6 +269,19 @@ function populateChannelsList(channels, targetElement) {
   });
 }
 
+function clearChannelMessages() {
+  const container = document.getElementById("message-container-list");
+  const loadingIndicator = document.getElementById("loading-indicator");
+
+  // Remove all child elements (messages)
+  while (container.firstChild) {
+    container.removeChild(container.firstChild);
+  }
+
+  // Hide the loading indicator if it's visible
+  loadingIndicator.style.display = "none";
+}
+
 // Function to populate a list of channels in a specified container
 async function populateChannelMessages(channel, channelId) {
   const channelItemTemplate = document
@@ -276,15 +289,18 @@ async function populateChannelMessages(channel, channelId) {
     .cloneNode(true);
 
   const container = document.getElementById("message-container-list");
+  const loadingIndicator = document.getElementById("loading-indicator"); // Add this line
   let start = 0; // Initial message index
 
   container.addEventListener("scroll", async function () {
     // When scroll reaches top
     if (container.scrollTop === 0) {
       try {
+        // Show the loading indicator while fetching new messages
+        loadingIndicator.style.display = "block"; // Show the loading element
+
         const url = `message/${channelId}?start=${start + 25}`;
         const response = await apiCallGet(url, true);
-        console.log(response);
         const newMessages = response.messages;
 
         if (newMessages.length > 0) {
@@ -331,6 +347,9 @@ async function populateChannelMessages(channel, channelId) {
             behavior: "instant",
           });
         }
+
+        // Hide the loading indicator after messages are loaded
+        loadingIndicator.style.display = "none"; // Hide the loading element
       } catch (error) {
         // Handle any errors that occur during the API call
         showErrorModal(error);
@@ -343,6 +362,8 @@ async function populateChannelMessages(channel, channelId) {
 // Function to load messages and append them to the container
 async function loadMessages(channelId, start, template, container) {
   try {
+    clearChannelMessages();
+    console.log("first");
     const url = `message/${channelId}?start=${start}`;
     const response = await apiCallGet(url, true);
     const messages = response.messages;
@@ -505,14 +526,6 @@ export function showPage(pageId) {
   });
 }
 
-export function openCreateChannelModal() {
-  const newChannelModal = new bootstrap.Modal(
-    document.getElementById("createChannelModal")
-  );
-
-  newChannelModal.show();
-}
-
 async function handleSaveChanges(channelId) {
   try {
     // Construct the request body with the updated channel data
@@ -531,6 +544,14 @@ async function handleSaveChanges(channelId) {
   }
 }
 
+export function openCreateChannelModal() {
+  const newChannelModal = new bootstrap.Modal(
+    document.getElementById("createChannelModal")
+  );
+
+  newChannelModal.show();
+}
+
 function openEditChannelModal(channel, channelId) {
   // Create a unique modal element for this channel
   const uniqueEditChannelModal = new bootstrap.Modal(
@@ -540,6 +561,7 @@ function openEditChannelModal(channel, channelId) {
   const editChannelSaveChanges = document.querySelector("#editChannelButton");
   const editChannelNameInput = document.querySelector("#editChannelName");
   const editChannelDescInput = document.querySelector("#editDescription");
+  const cancelConfirm = document.querySelector(".cancel-edit");
 
   // Set the input fields with the channel's name and description
   editChannelNameInput.value = channel.name;
@@ -550,6 +572,11 @@ function openEditChannelModal(channel, channelId) {
     // Close the unique modal after editing
     uniqueEditChannelModal.hide();
     // Remove the event listener to avoid double-triggering
+    editChannelSaveChanges.removeEventListener("click", saveChangesAndClose);
+  }
+
+  function confirmCancelSave() {
+    uniqueEditChannelModal.hide();
     editChannelSaveChanges.removeEventListener("click", saveChangesAndClose);
   }
 
@@ -567,6 +594,7 @@ function openLeaveChannelModal(channel, channelId) {
 
   const leaveChannelConfirm = document.querySelector("#leaveChannelConfirm");
   const leaveChannelName = document.getElementById("leaveChannelMessage");
+  const cancelConfirm = document.querySelectorAll(".cancel-leave");
 
   leaveChannelName.textContent = `Are you sure you want to leave the channel '${channel.name}'`;
 
@@ -577,6 +605,15 @@ function openLeaveChannelModal(channel, channelId) {
     // Remove the event listener to avoid double-triggering
     leaveChannelConfirm.removeEventListener("click", confirmAndLeave);
   }
+
+  function confirmNotLeave() {
+    uniqueLeaveChannelModal.hide();
+    leaveChannelConfirm.removeEventListener("click", confirmAndLeave);
+  }
+
+  cancelConfirm.forEach((button) => {
+    button.addEventListener("click", confirmNotLeave);
+  });
 
   leaveChannelConfirm.addEventListener("click", confirmAndLeave);
 
@@ -591,6 +628,7 @@ function openJoinChannelModal(channelId) {
   );
 
   const joinChannelConfirm = document.querySelector("#joinChannelConfirm");
+  const cancelConfirm = document.querySelectorAll(".cancel-join");
 
   function confirmAndJoin() {
     handleJoinChannel(channelId);
@@ -599,6 +637,16 @@ function openJoinChannelModal(channelId) {
     // Remove the event listener to avoid double-triggering
     joinChannelConfirm.removeEventListener("click", confirmAndJoin);
   }
+
+  function confirmNotJoin() {
+    uniqueJoinChannelModal.hide();
+    joinChannelConfirm.removeEventListener("click", confirmAndJoin);
+  }
+
+  cancelConfirm.forEach((button) => {
+    button.addEventListener("click", confirmNotJoin);
+  });
+
   joinChannelConfirm.addEventListener("click", confirmAndJoin);
 
   // Show the unique modal

@@ -21,6 +21,19 @@ main {
 }
 
 #message-container-list {
-    max-height: 400px;
+    max-height: 70%;
     overflow-y: scroll;
 }
+
+.loading-indicator {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    text-align: center;
+  }
+  
+  .spinner-border {
+    width: 2rem;
+    height: 2rem;
+  }
