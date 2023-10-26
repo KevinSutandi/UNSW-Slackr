@@ -47,6 +47,29 @@
       ],
       "messages": [
         {
+          "id": 219,
+          "message": "asdf",
+          "sender": 70238,
+          "sentAt": "2023-10-26T15:27:01.702Z",
+          "edited": false,
+          "editedAt": null,
+          "pinned": false,
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "fire"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
+            }
+          ]
+        },
+        {
           "id": 218,
           "message": "dfdgd",
           "sender": 70238,
@@ -54,7 +77,16 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
+            }
+          ]
         },
         {
           "id": 216,
@@ -68,6 +100,10 @@
             {
               "user": 70238,
               "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
             }
           ]
         },
@@ -79,17 +115,35 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
+            }
+          ]
         },
         {
           "id": 212,
-          "message": "asdfasdf",
+          "message": "asdfasdfasdf",
           "sender": 70238,
           "sentAt": "2023-10-25T14:40:12.031Z",
-          "edited": false,
-          "editedAt": null,
+          "edited": true,
+          "editedAt": "2023-10-26T15:26:19.394Z",
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
+            }
+          ]
         },
         {
           "id": 210,
@@ -99,15 +153,32 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 15272,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "fire"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
+            }
+          ]
         },
         {
           "id": 207,
-          "message": "asdfasdffasdasdfasdfasdfasdfasdfasdfasdfasdf",
+          "message": "asdfasdfasdfasdfasfd",
           "sender": 70238,
           "sentAt": "2023-10-25T13:37:53.160Z",
           "edited": true,
-          "editedAt": "2023-10-26T15:05:01.886Z",
+          "editedAt": "2023-10-26T15:25:38.540Z",
           "pinned": false,
           "reacts": [
             {
@@ -132,6 +203,10 @@
             {
               "user": 15272,
               "react": "heart"
+            },
+            {
+              "user": 15272,
+              "react": "thumbsUp"
             }
           ]
         },
@@ -187,18 +262,13 @@
         },
         {
           "id": 152,
-          "message": "asdf",
+          "message": "asdfasdf",
           "sender": 70238,
           "sentAt": "2023-10-25T13:33:08.758Z",
-          "edited": false,
-          "editedAt": null,
+          "edited": true,
+          "editedAt": "2023-10-26T15:26:50.947Z",
           "pinned": false,
-          "reacts": [
-            {
-              "user": 70238,
-              "react": "heart"
-            }
-          ]
+          "reacts": []
         },
         {
           "id": 151,
@@ -208,12 +278,7 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": [
-            {
-              "user": 70238,
-              "react": "heart"
-            }
-          ]
+          "reacts": []
         },
         {
           "id": 150,
@@ -248,7 +313,16 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
+            }
+          ]
         },
         {
           "id": 147,
@@ -258,7 +332,20 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 15272,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
+            },
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            }
+          ]
         },
         {
           "id": 146,
@@ -292,11 +379,11 @@
         },
         {
           "id": 143,
-          "message": "s",
+          "message": "sasdfasdf",
           "sender": 70238,
           "sentAt": "2023-10-25T13:33:05.743Z",
-          "edited": false,
-          "editedAt": null,
+          "edited": true,
+          "editedAt": "2023-10-26T15:26:55.180Z",
           "pinned": false,
           "reacts": []
         },
@@ -328,7 +415,12 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            }
+          ]
         },
         {
           "id": 139,
@@ -438,12 +530,7 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": [
-            {
-              "user": 70238,
-              "react": "heart"
-            }
-          ]
+          "reacts": []
         },
         {
           "id": 129,
@@ -577,11 +664,11 @@
         },
         {
           "id": 116,
-          "message": "asdf",
+          "message": "asdfasdf",
           "sender": 70238,
           "sentAt": "2023-10-25T13:32:50.236Z",
-          "edited": false,
-          "editedAt": null,
+          "edited": true,
+          "editedAt": "2023-10-26T15:24:57.490Z",
           "pinned": false,
           "reacts": [
             {
@@ -2149,5 +2236,5 @@
       ]
     }
   },
-  "nextMessageId": 219
+  "nextMessageId": 220
 }

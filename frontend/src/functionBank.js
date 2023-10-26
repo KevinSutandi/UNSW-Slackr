@@ -16,6 +16,32 @@ function showErrorModal(errorMessage) {
   bootstrapModal.show();
 }
 
+function findMessageDetails(channelId, messageIdToFind, start = 0) {
+  const batchSize = 25; // Number of messages to fetch in each API request
+
+  const url = `message/${channelId}?start=${start}&limit=${batchSize}`;
+
+  // Make an API request to fetch a batch of messages
+  return apiCallGet(url, true).then((response) => {
+    const messages = response.messages;
+
+    // Check if the desired message is in the current batch
+    const foundMessage = messages.find(
+      (message) => message.id === messageIdToFind
+    );
+    if (foundMessage) {
+      return foundMessage; // Found the desired message
+    }
+
+    // If the desired message is not found and there are more messages, fetch the next batch
+    if (messages.length === batchSize) {
+      return findMessageDetails(channelId, messageIdToFind, start + batchSize);
+    } else {
+      throw new Error("Message not found"); // Desired message not found in the channel
+    }
+  });
+}
+
 // Event handler for user login
 export const handleLogin = () => {
   const emailInput = document.getElementById("emailInput");
@@ -148,10 +174,21 @@ export function handleChannelClick(channelId) {
     });
 }
 
+function deleteMessageLocal(messageId) {
+  const messageElement = document.getElementById(messageId);
+
+  if (messageElement) {
+    // Check if the element with the provided ID exists
+    messageElement.remove(); // Remove the element from the DOM
+  } else {
+    console.log("Message not found:", messageId);
+  }
+}
+
 function handleDeleteMessage(channelId, messageId) {
   apiCallDelete(`message/${channelId}/${messageId}`, true)
     .then((response) => {
-      populateChannelMessages(channelId);
+      deleteMessageLocal(messageId);
     })
     .catch((error) => {
       showErrorModal(error);
@@ -226,8 +263,10 @@ function handleSendMessage(channelId, message, textBox) {
 
 function handleEditMessage(channelId, messageId) {
   const messageCheck = document.getElementById(messageId);
+  const timeSent = messageCheck.querySelector("#timeSent");
+  const timeSentBefore = timeSent.textContent;
   const messageBody = messageCheck.querySelector("#messageBody");
-  const messageContent = messageBody.textContent;
+  let messageContent = messageBody.textContent;
 
   const editMessageForm = document.querySelector("#newMessageEdit").value; // Get the new message value
 
@@ -247,45 +286,110 @@ function handleEditMessage(channelId, messageId) {
 
   apiCall(`message/${channelId}/${messageId}`, body, "PUT", true)
     .then((response) => {
-      populateChannelMessages(channelId);
+      // Assuming the API response contains an edited timestamp
+      const editedTimestamp = new Date();
+
+      const timeFormatted = formatTimeDifference(editedTimestamp);
+
+      // Update the message content and the edited message time display
+      messageBody.textContent = editMessageForm;
+      timeSent.textContent = timeSentBefore + ` (edited ${timeFormatted})`;
     })
     .catch((error) => {
       showErrorModal(error);
     });
 }
 
-function handleReaction(reactionType, channelId, messageId, hasReacted) {
+function displayReaction(channelId, messageId, reactionType) {
+  findMessageDetails(channelId, messageId, 0)
+    .then((message) => {
+      const messageItem = document.getElementById(messageId);
+      const reactionButtons = messageItem.querySelectorAll(".reaction-badge");
+
+      reactionButtons.forEach((button) => {
+        const buttonReactionType = button.id;
+        const badgeCount = button.querySelector(".badge-count");
+        let currentCount = 0;
+
+        for (const reactCheck of message.reacts) {
+          if (reactCheck.react === buttonReactionType) {
+            currentCount++;
+          }
+        }
+
+        badgeCount.textContent = currentCount;
+
+        // Check if the current user has reacted with the same type
+        const hasReacted = message.reacts.some(
+          (reactCheck) =>
+            reactCheck.user === parseInt(globalUserId) &&
+            reactCheck.react === buttonReactionType
+        );
+
+        // Update the button's appearance if the user has reacted
+        if (hasReacted) {
+          button.classList.add("btn-primary");
+          button.classList.remove("btn-secondary");
+          badgeCount.classList.remove("text-bg-secondary");
+          badgeCount.classList.add("text-bg-primary");
+        } else {
+          button.classList.remove("btn-primary");
+          button.classList.add("btn-secondary");
+          badgeCount.classList.add("text-bg-secondary");
+          badgeCount.classList.remove("text-bg-primary");
+        }
+      });
+    })
+    .catch((error) => {
+      console.error("Error:", error);
+    });
+}
+
+function handleReaction(reactionType, channelId, messageId) {
   const body = {
     react: reactionType,
   };
 
-  if (hasReacted) {
-    return apiCall(
-      `message/unreact/${channelId}/${messageId}`,
-      body,
-      "POST",
-      true
-    )
-      .then(() => {
-        return populateChannelMessages(channelId);
-      })
-      .catch((error) => {
-        showErrorModal(error);
-      });
-  } else {
-    return apiCall(
-      `message/react/${channelId}/${messageId}`,
-      body,
-      "POST",
-      true
-    )
-      .then(() => {
-        return populateChannelMessages(channelId);
-      })
-      .catch((error) => {
-        showErrorModal(error);
-      });
-  }
+  let hasReacted = false;
+
+  findMessageDetails(channelId, messageId, 0).then((message) => {
+    for (const reactCheck of message.reacts) {
+      if (
+        reactCheck.user === parseInt(globalUserId) &&
+        reactCheck.react === reactionType
+      ) {
+        hasReacted = true;
+      }
+    }
+
+    if (hasReacted) {
+      return apiCall(
+        `message/unreact/${channelId}/${messageId}`,
+        body,
+        "POST",
+        true
+      )
+        .then(() => {
+          return displayReaction(channelId, messageId, reactionType);
+        })
+        .catch((error) => {
+          showErrorModal(error);
+        });
+    } else {
+      return apiCall(
+        `message/react/${channelId}/${messageId}`,
+        body,
+        "POST",
+        true
+      )
+        .then(() => {
+          return displayReaction(channelId, messageId, reactionType);
+        })
+        .catch((error) => {
+          showErrorModal(error);
+        });
+    }
+  });
 }
 
 ///////////////////////////////////////////////////
@@ -488,35 +592,19 @@ function populateChannelMessages(channelId) {
                         if (reactCheck.react === reactionType) {
                           currentCount++;
                         }
+                        if (
+                          reactCheck.user === parseInt(globalUserId) &&
+                          reactCheck.react === reactionType
+                        ) {
+                          button.classList.add("btn-primary");
+                          button.classList.remove("btn-secondary");
+                          badgeCount.classList.remove("text-bg-secondary");
+                          badgeCount.classList.add("text-bg-primary");
+                        }
                       }
                       badgeCount.textContent = currentCount;
                       button.addEventListener("click", () => {
-                        let hasReacted = false;
-                        // Send the reaction to the server or handle it as needed
-                        for (const reactCheck of message.reacts) {
-                          if (
-                            reactCheck.user === parseInt(globalUserId) &&
-                            reactCheck.react === reactionType
-                          ) {
-                            hasReacted = true;
-                          }
-                          if (
-                            reactCheck.user === parseInt(globalUserId) &&
-                            reactCheck.react === reactionType
-                          ) {
-                            button.classList.add("btn-primary");
-                            button.classList.remove("btn-secondary");
-                            badgeCount.classList.remove("text-bg-secondary");
-                            badgeCount.classList.add("text-bg-primary");
-                          }
-                        }
-
-                        handleReaction(
-                          reactionType,
-                          channelId,
-                          messageId,
-                          hasReacted
-                        );
+                        handleReaction(reactionType, channelId, messageId);
                       });
                     });
 
@@ -661,23 +749,8 @@ function loadMessages(channelId, template, container) {
                 }
                 badgeCount.textContent = currentCount;
                 button.addEventListener("click", () => {
-                  let hasReacted = false;
                   // Send the reaction to the server or handle it as needed
-                  for (const reactCheck of message.reacts) {
-                    if (
-                      reactCheck.user === parseInt(globalUserId) &&
-                      reactCheck.react === reactionType
-                    ) {
-                      hasReacted = true;
-                    }
-                  }
-
-                  handleReaction(
-                    reactionType,
-                    channelId,
-                    messageId,
-                    hasReacted
-                  );
+                  handleReaction(reactionType, channelId, messageId);
                 });
               });
 
