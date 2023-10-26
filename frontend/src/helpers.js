@@ -75,3 +75,23 @@ export const apiCallGet = (path, isAuth = false) => {
       });
   });
 };
+
+export const apiCallDelete = (path, isAuth = false) => {
+  return new Promise((resolve, reject) => {
+    fetch(backend + path, {
+      method: "DELETE",
+      headers: {
+        "Content-type": "application/json",
+        Authorization: isAuth ? `${globalToken}` : undefined,
+      },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.error) {
+          reject(data.error);
+        } else {
+          resolve(data); // Resolve with the data
+        }
+      });
+  });
+};

@@ -1,4 +1,9 @@
-import { fileToDataUrl, apiCall, apiCallGet } from "./helpers.js";
+import {
+  fileToDataUrl,
+  apiCall,
+  apiCallGet,
+  apiCallDelete,
+} from "./helpers.js";
 
 import { globalUserId, showAppropriatePage } from "./main.js";
 
@@ -126,6 +131,16 @@ export function handleChannelClick(channelId) {
       } else {
         showErrorModal(error);
       }
+    });
+}
+
+function handleDeleteMessage(channelId, messageId) {
+  apiCallDelete(`message/${channelId}/${messageId}`, true)
+    .then((response) => {
+      populateChannelMessages(channelId);
+    })
+    .catch((error) => {
+      showErrorModal(error);
     });
 }
 
@@ -336,6 +351,7 @@ function populateChannelMessages(channelId) {
                     const deleteMessageButton = messageItem.querySelector(
                       "#deleteMessageButton"
                     );
+
                     messageItem.id = `${message.id}`;
                     messageItem.querySelector("#receipientName").textContent =
                       userDetails.name;
@@ -346,8 +362,7 @@ function populateChannelMessages(channelId) {
 
                     deleteMessageButton.addEventListener("click", function () {
                       const messageId = message.id;
-                      // Handle the delete message action here
-                      // TODO: handleDeleteMessage(channelId, messageId);
+                      openDeleteMessageModal(channelId, messageId);
                     });
 
                     messageItem.classList.remove("d-none");
@@ -422,6 +437,9 @@ function loadMessages(channelId, template, container) {
               const timeFormatted = formatTimeDifference(message.sentAt);
 
               const messageItem = template.cloneNode(true);
+              const deleteMessageButton = messageItem.querySelector(
+                "#deleteMessageButton"
+              );
               messageItem.id = `${message.id}`;
               messageItem.querySelector("#receipientName").textContent =
                 userDetails.name;
@@ -429,6 +447,11 @@ function loadMessages(channelId, template, container) {
                 timeFormatted;
               messageItem.querySelector("#messageBody").textContent =
                 message.message;
+
+              deleteMessageButton.addEventListener("click", function () {
+                const messageId = message.id;
+                openDeleteMessageModal(channelId, messageId);
+              });
               messageItem.classList.remove("d-none");
               container.appendChild(messageItem);
             }
@@ -757,6 +780,42 @@ function openJoinChannelModal(channelId) {
 
   // Show the unique modal
   uniqueJoinChannelModal.show();
+}
+
+function openDeleteMessageModal(channelId, messageId) {
+  // Create a unique modal element for this channel
+  const uniqueDeleteMessageModal = new bootstrap.Modal(
+    document.getElementById("deleteMessageModal")
+  );
+
+  const deleteMessageConfirm = document.querySelector("#deleteMessageConfirm");
+  const cancelConfirm = document.querySelectorAll(".cancel-delete-message");
+
+  function confirmAndDeleteMessage() {
+    handleDeleteMessage(channelId, messageId);
+    uniqueDeleteMessageModal.hide();
+    deleteMessageConfirm.removeEventListener("click", confirmAndDeleteMessage);
+  }
+
+  function confirmNotDeleteMessage() {
+    uniqueDeleteMessageModal.hide();
+    deleteMessageConfirm.removeEventListener("click", confirmAndDeleteMessage);
+  }
+
+  cancelConfirm.forEach((button) => {
+    button.addEventListener("click", confirmNotDeleteMessage);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      confirmNotDeleteMessage();
+    }
+  });
+
+  deleteMessageConfirm.addEventListener("click", confirmAndDeleteMessage);
+
+  // Show the unique modal
+  uniqueDeleteMessageModal.show();
 }
 
 ///////////////////////////////////////////////////
