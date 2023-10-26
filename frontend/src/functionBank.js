@@ -122,6 +122,20 @@ export const handleChannelDisplay = () => {
 export function handleChannelClick(channelId) {
   apiCallGet(`channel/${channelId}`, true)
     .then((response) => {
+      const channelList = document.querySelectorAll(".channel-item");
+
+      // Remove the "active" class from all channels
+      channelList.forEach((channel) => {
+        channel.classList.remove("active");
+      });
+
+      for (const channel of channelList) {
+        const id = parseInt(channel.id);
+
+        if (id === channelId) {
+          channel.classList.add("active");
+        }
+      }
       changeChannelViewPage(response, channelId);
     })
     .catch((error) => {
@@ -187,6 +201,7 @@ function handleJoinChannel(channelId) {
     });
 }
 
+// Handle Send Message (NOT PHOTOS)
 function handleSendMessage(channelId, message, textBox) {
   if (message.trim() === "") {
     return Promise.reject("Message cannot be empty");
@@ -203,6 +218,36 @@ function handleSendMessage(channelId, message, textBox) {
     })
     .then(() => {
       scrollToBottom();
+    })
+    .catch((error) => {
+      showErrorModal(error);
+    });
+}
+
+function handleEditMessage(channelId, messageId) {
+  const messageCheck = document.getElementById(messageId);
+  const messageBody = messageCheck.querySelector("#messageBody");
+  const messageContent = messageBody.textContent;
+
+  const editMessageForm = document.querySelector("#newMessageEdit").value; // Get the new message value
+
+  if (messageContent === editMessageForm) {
+    showErrorModal("New Message cannot be the same as the previous message");
+    return;
+  }
+
+  if (editMessageForm.trim() === "") {
+    showErrorModal("New Message cannot be blank");
+    return;
+  }
+
+  const body = {
+    message: editMessageForm,
+  };
+
+  apiCall(`message/${channelId}/${messageId}`, body, "PUT", true)
+    .then((response) => {
+      populateChannelMessages(channelId);
     })
     .catch((error) => {
       showErrorModal(error);
@@ -284,6 +329,7 @@ function populateChannelsList(channels, targetElement) {
     channelItem.classList.remove("d-none");
     const channelNameElement = channelItem.querySelector("#channelName");
     channelNameElement.textContent = channel.name;
+    channelItem.id = channel.id;
 
     // Add a click event listener to each channel item
     channelItem.addEventListener("click", () => {
@@ -346,24 +392,46 @@ function populateChannelMessages(channelId) {
                   newMessages.forEach((message, index) => {
                     const userDetails = userDetailsResponses[index];
                     const timeFormatted = formatTimeDifference(message.sentAt);
+                    const messageSenderId = parseInt(message.sender);
 
                     const messageItem = channelItemTemplate.cloneNode(true);
                     const deleteMessageButton = messageItem.querySelector(
                       "#deleteMessageButton"
                     );
+                    const editMessageButton =
+                      messageItem.querySelector("#editButton");
+
+                    if (message.sender === parseInt(globalUserId)) {
+                      // Enable the button
+                      deleteMessageButton.addEventListener(
+                        "click",
+                        function () {
+                          const messageId = message.id;
+                          openDeleteMessageModal(channelId, messageId);
+                        }
+                      );
+                      editMessageButton.addEventListener("click", function () {
+                        const messageId = message.id;
+                        openEditMessagelModal(channelId, messageId);
+                      });
+                    } else {
+                      // Disable the button
+                      editMessageButton.classList.add("d-none");
+                      deleteMessageButton.classList.add("d-none");
+                    }
 
                     messageItem.id = `${message.id}`;
                     messageItem.querySelector("#receipientName").textContent =
                       userDetails.name;
-                    messageItem.querySelector("#timeSent").textContent =
-                      timeFormatted;
+                    messageItem.querySelector(
+                      "#timeSent"
+                    ).textContent = `${timeFormatted} ${
+                      message.edited
+                        ? `(edited ${formatTimeDifference(message.editedAt)})`
+                        : ""
+                    }`;
                     messageItem.querySelector("#messageBody").textContent =
                       message.message;
-
-                    deleteMessageButton.addEventListener("click", function () {
-                      const messageId = message.id;
-                      openDeleteMessageModal(channelId, messageId);
-                    });
 
                     messageItem.classList.remove("d-none");
                     container.insertBefore(messageItem, container.firstChild);
@@ -440,18 +508,38 @@ function loadMessages(channelId, template, container) {
               const deleteMessageButton = messageItem.querySelector(
                 "#deleteMessageButton"
               );
+              const editMessageButton =
+                messageItem.querySelector("#editButton");
+
+              if (message.sender === parseInt(globalUserId)) {
+                // Enable the button
+                deleteMessageButton.addEventListener("click", function () {
+                  const messageId = message.id;
+                  openDeleteMessageModal(channelId, messageId);
+                });
+                editMessageButton.addEventListener("click", function () {
+                  const messageId = message.id;
+                  openEditMessagelModal(channelId, messageId);
+                });
+              } else {
+                // Disable the button
+                editMessageButton.classList.add("d-none");
+                deleteMessageButton.classList.add("d-none");
+              }
+
               messageItem.id = `${message.id}`;
               messageItem.querySelector("#receipientName").textContent =
                 userDetails.name;
-              messageItem.querySelector("#timeSent").textContent =
-                timeFormatted;
+              messageItem.querySelector(
+                "#timeSent"
+              ).textContent = `${timeFormatted} ${
+                message.edited
+                  ? `(edited ${formatTimeDifference(message.editedAt)})`
+                  : ""
+              }`;
               messageItem.querySelector("#messageBody").textContent =
                 message.message;
 
-              deleteMessageButton.addEventListener("click", function () {
-                const messageId = message.id;
-                openDeleteMessageModal(channelId, messageId);
-              });
               messageItem.classList.remove("d-none");
               container.appendChild(messageItem);
             }
@@ -498,6 +586,13 @@ function formatTimeDifference(timestamp) {
 export function changeChannelViewWelcome() {
   const channelInfoPage = document.getElementById("channelInfoPage");
   const welcomeScreen = document.getElementById("welcome-screen");
+
+  const channelList = document.querySelectorAll(".channel-item");
+
+  // Remove the "active" class from all channels
+  channelList.forEach((channel) => {
+    channel.classList.remove("active");
+  });
 
   // Show the welcome screen
   welcomeScreen.classList.remove("d-none");
@@ -638,8 +733,8 @@ export function handleSaveChanges(channelId) {
   return new Promise((resolve, reject) => {
     // Construct the request body with the updated channel data
     const body = {
-      name: editChannelName.value, // Update with the new name
-      description: editDescription.value, // Update with the new description
+      name: editChannelName.value,
+      description: editDescription.value,
     };
 
     // Call the API to update the channel data
@@ -816,6 +911,49 @@ function openDeleteMessageModal(channelId, messageId) {
 
   // Show the unique modal
   uniqueDeleteMessageModal.show();
+}
+
+function openEditMessagelModal(channelId, messageId) {
+  // Create a unique modal element for this channel
+  const uniqueEditMessageModal = new bootstrap.Modal(
+    document.getElementById("editMessageModal")
+  );
+
+  const editMessageConfirm = document.querySelector("#editMessageButton");
+  const cancelConfirm = document.querySelectorAll(".cancel-edit-message");
+  const editMessageForm = document.querySelector("#newMessageEdit");
+
+  const messageCheck = document.getElementById(messageId);
+  const messageBody = messageCheck.querySelector("#messageBody");
+  const messageContent = messageBody.textContent;
+
+  editMessageForm.value = messageContent;
+
+  function confirmAndEditMessage() {
+    handleEditMessage(channelId, messageId);
+    uniqueEditMessageModal.hide();
+    editMessageConfirm.removeEventListener("click", confirmAndEditMessage);
+  }
+
+  function confirmNotEditessage() {
+    uniqueEditMessageModal.hide();
+    editMessageConfirm.removeEventListener("click", confirmAndEditMessage);
+  }
+
+  cancelConfirm.forEach((button) => {
+    button.addEventListener("click", confirmNotEditessage);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      confirmNotEditessage();
+    }
+  });
+
+  editMessageConfirm.addEventListener("click", confirmAndEditMessage);
+
+  // Show the unique modal
+  uniqueEditMessageModal.show();
 }
 
 ///////////////////////////////////////////////////
