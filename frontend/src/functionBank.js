@@ -254,6 +254,40 @@ function handleEditMessage(channelId, messageId) {
     });
 }
 
+function handleReaction(reactionType, channelId, messageId, hasReacted) {
+  const body = {
+    react: reactionType,
+  };
+
+  if (hasReacted) {
+    return apiCall(
+      `message/unreact/${channelId}/${messageId}`,
+      body,
+      "POST",
+      true
+    )
+      .then(() => {
+        return populateChannelMessages(channelId);
+      })
+      .catch((error) => {
+        showErrorModal(error);
+      });
+  } else {
+    return apiCall(
+      `message/react/${channelId}/${messageId}`,
+      body,
+      "POST",
+      true
+    )
+      .then(() => {
+        return populateChannelMessages(channelId);
+      })
+      .catch((error) => {
+        showErrorModal(error);
+      });
+  }
+}
+
 ///////////////////////////////////////////////////
 /**
  * Helper Functions
@@ -391,10 +425,12 @@ function populateChannelMessages(channelId) {
                 .then((userDetailsResponses) => {
                   newMessages.forEach((message, index) => {
                     const userDetails = userDetailsResponses[index];
+                    const messageId = message.id;
                     const timeFormatted = formatTimeDifference(message.sentAt);
-                    const messageSenderId = parseInt(message.sender);
 
                     const messageItem = channelItemTemplate.cloneNode(true);
+                    const messageProfilePic =
+                      messageItem.querySelector("#messageProfilePic");
                     const deleteMessageButton = messageItem.querySelector(
                       "#deleteMessageButton"
                     );
@@ -406,7 +442,6 @@ function populateChannelMessages(channelId) {
                       deleteMessageButton.addEventListener(
                         "click",
                         function () {
-                          const messageId = message.id;
                           openDeleteMessageModal(channelId, messageId);
                         }
                       );
@@ -432,6 +467,58 @@ function populateChannelMessages(channelId) {
                     }`;
                     messageItem.querySelector("#messageBody").textContent =
                       message.message;
+
+                    // Check if userDetails.image is null or undefined
+                    if (userDetails.image !== null) {
+                      messageProfilePic.src = userDetails.image;
+                    } else {
+                      // userDetails.image is null, so set the default image
+                      messageProfilePic.src = "default.jpg";
+                    }
+
+                    // Add click event listeners to each reaction button
+                    const reactionButtons =
+                      messageItem.querySelectorAll(".reaction-badge");
+
+                    reactionButtons.forEach((button) => {
+                      const reactionType = button.id;
+                      const badgeCount = button.querySelector(".badge-count");
+                      let currentCount = 0;
+                      for (const reactCheck of message.reacts) {
+                        if (reactCheck.react === reactionType) {
+                          currentCount++;
+                        }
+                      }
+                      badgeCount.textContent = currentCount;
+                      button.addEventListener("click", () => {
+                        let hasReacted = false;
+                        // Send the reaction to the server or handle it as needed
+                        for (const reactCheck of message.reacts) {
+                          if (
+                            reactCheck.user === parseInt(globalUserId) &&
+                            reactCheck.react === reactionType
+                          ) {
+                            hasReacted = true;
+                          }
+                          if (
+                            reactCheck.user === parseInt(globalUserId) &&
+                            reactCheck.react === reactionType
+                          ) {
+                            button.classList.add("btn-primary");
+                            button.classList.remove("btn-secondary");
+                            badgeCount.classList.remove("text-bg-secondary");
+                            badgeCount.classList.add("text-bg-primary");
+                          }
+                        }
+
+                        handleReaction(
+                          reactionType,
+                          channelId,
+                          messageId,
+                          hasReacted
+                        );
+                      });
+                    });
 
                     messageItem.classList.remove("d-none");
                     container.insertBefore(messageItem, container.firstChild);
@@ -501,10 +588,13 @@ function loadMessages(channelId, template, container) {
           .then((userDetailsResponses) => {
             for (let i = 0; i < messages.length; i++) {
               const message = messages[i];
+              const messageId = message.id;
               const userDetails = userDetailsResponses[i];
               const timeFormatted = formatTimeDifference(message.sentAt);
 
               const messageItem = template.cloneNode(true);
+              const messageProfilePic =
+                messageItem.querySelector("#messageProfilePic");
               const deleteMessageButton = messageItem.querySelector(
                 "#deleteMessageButton"
               );
@@ -514,11 +604,9 @@ function loadMessages(channelId, template, container) {
               if (message.sender === parseInt(globalUserId)) {
                 // Enable the button
                 deleteMessageButton.addEventListener("click", function () {
-                  const messageId = message.id;
                   openDeleteMessageModal(channelId, messageId);
                 });
                 editMessageButton.addEventListener("click", function () {
-                  const messageId = message.id;
                   openEditMessagelModal(channelId, messageId);
                 });
               } else {
@@ -527,7 +615,7 @@ function loadMessages(channelId, template, container) {
                 deleteMessageButton.classList.add("d-none");
               }
 
-              messageItem.id = `${message.id}`;
+              messageItem.id = messageId;
               messageItem.querySelector("#receipientName").textContent =
                 userDetails.name;
               messageItem.querySelector(
@@ -539,6 +627,59 @@ function loadMessages(channelId, template, container) {
               }`;
               messageItem.querySelector("#messageBody").textContent =
                 message.message;
+
+              // Check if userDetails.image is null or undefined
+              if (userDetails.image !== null) {
+                messageProfilePic.src = userDetails.image;
+              } else {
+                // userDetails.image is null, so set the default image
+                messageProfilePic.src = "default.jpg";
+              }
+
+              // Add click event listeners to each reaction button
+              const reactionButtons =
+                messageItem.querySelectorAll(".reaction-badge");
+
+              reactionButtons.forEach((button) => {
+                const reactionType = button.id;
+                const badgeCount = button.querySelector(".badge-count");
+                let currentCount = 0;
+                for (const reactCheck of message.reacts) {
+                  if (reactCheck.react === reactionType) {
+                    currentCount++;
+                  }
+
+                  if (
+                    reactCheck.user === parseInt(globalUserId) &&
+                    reactCheck.react === reactionType
+                  ) {
+                    button.classList.add("btn-primary");
+                    button.classList.remove("btn-secondary");
+                    badgeCount.classList.remove("text-bg-secondary");
+                    badgeCount.classList.add("text-bg-primary");
+                  }
+                }
+                badgeCount.textContent = currentCount;
+                button.addEventListener("click", () => {
+                  let hasReacted = false;
+                  // Send the reaction to the server or handle it as needed
+                  for (const reactCheck of message.reacts) {
+                    if (
+                      reactCheck.user === parseInt(globalUserId) &&
+                      reactCheck.react === reactionType
+                    ) {
+                      hasReacted = true;
+                    }
+                  }
+
+                  handleReaction(
+                    reactionType,
+                    channelId,
+                    messageId,
+                    hasReacted
+                  );
+                });
+              });
 
               messageItem.classList.remove("d-none");
               container.appendChild(messageItem);
