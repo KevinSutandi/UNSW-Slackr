@@ -20,6 +20,10 @@ main {
     fill: currentcolor
 }
 
+#channelInfoPage {
+  overflow: auto;
+}
+
 .message-container {
     flex: 1; /* Allow the message container to take the remaining space */
     display: flex;

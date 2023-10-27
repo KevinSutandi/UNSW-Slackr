@@ -6,7 +6,7 @@
       "password": "solongbouldercity",
       "bio": null,
       "image": null,
-      "sessionActive": true
+      "sessionActive": false
     },
     "56422": {
       "email": "sebastian@email.com",
@@ -39,13 +39,53 @@
       "name": "Check Messagessss",
       "creator": 70238,
       "private": false,
-      "description": "yurrfffasdfasdf",
+      "description": "yurrfffasdfasdfasdfasdfkasdjf;lkjasfd\n",
       "createdAt": "2023-10-25T13:16:10.024Z",
       "members": [
         70238,
         15272
       ],
       "messages": [
+        {
+          "id": 229,
+          "message": "asdsadfasdf",
+          "sender": 15272,
+          "sentAt": "2023-10-27T03:04:36.610Z",
+          "edited": false,
+          "editedAt": null,
+          "pinned": false,
+          "reacts": []
+        },
+        {
+          "id": 228,
+          "message": "asdsadf",
+          "sender": 15272,
+          "sentAt": "2023-10-27T03:04:34.601Z",
+          "edited": false,
+          "editedAt": null,
+          "pinned": false,
+          "reacts": []
+        },
+        {
+          "id": 227,
+          "message": "Kontol",
+          "sender": 15272,
+          "sentAt": "2023-10-27T03:04:26.825Z",
+          "edited": false,
+          "editedAt": null,
+          "pinned": false,
+          "reacts": []
+        },
+        {
+          "id": 220,
+          "message": "THis is great",
+          "sender": 70238,
+          "sentAt": "2023-10-26T15:45:40.562Z",
+          "edited": false,
+          "editedAt": null,
+          "pinned": false,
+          "reacts": []
+        },
         {
           "id": 219,
           "message": "asdf",
@@ -54,20 +94,7 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": [
-            {
-              "user": 70238,
-              "react": "thumbsUp"
-            },
-            {
-              "user": 70238,
-              "react": "fire"
-            },
-            {
-              "user": 70238,
-              "react": "heart"
-            }
-          ]
+          "reacts": []
         },
         {
           "id": 218,
@@ -77,16 +104,7 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": [
-            {
-              "user": 70238,
-              "react": "thumbsUp"
-            },
-            {
-              "user": 70238,
-              "react": "heart"
-            }
-          ]
+          "reacts": []
         },
         {
           "id": 216,
@@ -375,7 +393,12 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            }
+          ]
         },
         {
           "id": 143,
@@ -480,7 +503,16 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "heart"
+            },
+            {
+              "user": 70238,
+              "react": "fire"
+            }
+          ]
         },
         {
           "id": 134,
@@ -500,7 +532,16 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "heart"
+            }
+          ]
         },
         {
           "id": 132,
@@ -580,7 +621,20 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "heart"
+            },
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            },
+            {
+              "user": 70238,
+              "react": "fire"
+            }
+          ]
         },
         {
           "id": 124,
@@ -1347,36 +1401,6 @@
       ],
       "messages": [
         {
-          "id": 211,
-          "message": "Wiselly <3",
-          "sender": 70238,
-          "sentAt": "2023-10-25T13:39:59.890Z",
-          "edited": false,
-          "editedAt": null,
-          "pinned": false,
-          "reacts": []
-        },
-        {
-          "id": 205,
-          "message": "1",
-          "sender": 70238,
-          "sentAt": "2023-10-25T13:37:04.191Z",
-          "edited": false,
-          "editedAt": null,
-          "pinned": false,
-          "reacts": []
-        },
-        {
-          "id": 203,
-          "message": "1",
-          "sender": 70238,
-          "sentAt": "2023-10-25T13:37:04.185Z",
-          "edited": false,
-          "editedAt": null,
-          "pinned": false,
-          "reacts": []
-        },
-        {
           "id": 201,
           "message": "fffff",
           "sender": 70238,
@@ -1395,68 +1419,6 @@
           "editedAt": null,
           "pinned": false,
           "reacts": []
-        },
-        {
-          "id": 199,
-          "message": "asdfasdfasdf",
-          "sender": 70238,
-          "sentAt": "2023-10-25T13:36:51.820Z",
-          "edited": true,
-          "editedAt": "2023-10-26T13:36:02.599Z",
-          "pinned": false,
-          "reacts": [
-            {
-              "user": 15272,
-              "react": "thumbsUp"
-            },
-            {
-              "user": 15272,
-              "react": "fire"
-            },
-            {
-              "user": 15272,
-              "react": "heart"
-            },
-            {
-              "user": 70238,
-              "react": "heart"
-            }
-          ]
-        },
-        {
-          "id": 197,
-          "message": "3",
-          "sender": 70238,
-          "sentAt": "2023-10-25T13:36:51.152Z",
-          "edited": false,
-          "editedAt": null,
-          "pinned": false,
-          "reacts": []
-        },
-        {
-          "id": 196,
-          "message": "3",
-          "sender": 70238,
-          "sentAt": "2023-10-25T13:36:51.147Z",
-          "edited": false,
-          "editedAt": null,
-          "pinned": false,
-          "reacts": []
-        },
-        {
-          "id": 195,
-          "message": "2",
-          "sender": 70238,
-          "sentAt": "2023-10-25T13:36:50.412Z",
-          "edited": false,
-          "editedAt": null,
-          "pinned": false,
-          "reacts": [
-            {
-              "user": 70238,
-              "react": "fire"
-            }
-          ]
         },
         {
           "id": 194,
@@ -1526,12 +1488,7 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": [
-            {
-              "user": 70238,
-              "react": "heart"
-            }
-          ]
+          "reacts": []
         },
         {
           "id": 186,
@@ -1746,7 +1703,20 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": []
+          "reacts": [
+            {
+              "user": 70238,
+              "react": "heart"
+            },
+            {
+              "user": 70238,
+              "react": "fire"
+            },
+            {
+              "user": 70238,
+              "react": "thumbsUp"
+            }
+          ]
         },
         {
           "id": 103,
@@ -1856,12 +1826,7 @@
           "edited": false,
           "editedAt": null,
           "pinned": false,
-          "reacts": [
-            {
-              "user": 70238,
-              "react": "heart"
-            }
-          ]
+          "reacts": []
         },
         {
           "id": 37,
@@ -2236,5 +2201,5 @@
       ]
     }
   },
-  "nextMessageId": 220
+  "nextMessageId": 230
 }

@@ -19,7 +19,7 @@ function showErrorModal(errorMessage) {
 function findMessageDetails(channelId, messageIdToFind, start = 0) {
   const batchSize = 25; // Number of messages to fetch in each API request
 
-  const url = `message/${channelId}?start=${start}&limit=${batchSize}`;
+  const url = `message/${channelId}?start=${start}`;
 
   // Make an API request to fetch a batch of messages
   return apiCallGet(url, true).then((response) => {
@@ -40,6 +40,229 @@ function findMessageDetails(channelId, messageIdToFind, start = 0) {
       throw new Error("Message not found"); // Desired message not found in the channel
     }
   });
+}
+
+function handlePinMessage(channelId, messageId) {
+  findMessageDetails(channelId, messageId, 0).then((message) => {
+    if (message.pinned) {
+      apiCall(`message/unpin/${channelId}/${messageId}`, {}, "POST", true)
+        .then(() => {
+          const pinnedContainer = document.getElementById(
+            "pinned-message-container"
+          );
+          const messageDivToRemove = pinnedContainer.querySelector(
+            `[data-message-id="${messageId}"]`
+          );
+
+          if (messageDivToRemove) {
+            pinnedContainer.removeChild(messageDivToRemove);
+          }
+
+          if (
+            pinnedContainer.querySelectorAll(".channel-message").length === 0
+          ) {
+            pinnedContainer.classList.add("d-none");
+          }
+
+          updatePinButtons(channelId, messageId);
+        })
+        .catch((error) => {
+          showErrorModal(error);
+        });
+    } else {
+      apiCall(`message/pin/${channelId}/${messageId}`, {}, "POST", true).then(
+        () => {
+          displayPinnedMessages([message], channelId);
+        }
+      );
+    }
+  });
+}
+
+function createMessageElement(message, userDetails, channelId, template) {
+  const messageId = message.id;
+  const timeFormatted = formatTimeDifference(message.sentAt);
+  const messageItem = template.cloneNode(true);
+  const messageProfilePic = messageItem.querySelector("#messageProfilePic");
+  const deleteMessageButton = messageItem.querySelector("#deleteMessageButton");
+  const editMessageButton = messageItem.querySelector("#editButton");
+  const pinMessageButton = messageItem.querySelector("#pinButton");
+
+  if (message.sender === parseInt(globalUserId)) {
+    editMessageButton.classList.remove("d-none");
+    deleteMessageButton.classList.remove("d-none");
+    // Enable the button
+    deleteMessageButton.addEventListener("click", function () {
+      openDeleteMessageModal(channelId, messageId);
+    });
+    editMessageButton.addEventListener("click", function () {
+      openEditMessageModal(channelId, messageId);
+    });
+  } else {
+    // Disable the button
+    editMessageButton.classList.add("d-none");
+    deleteMessageButton.classList.add("d-none");
+  }
+
+  pinMessageButton.addEventListener("click", function () {
+    handlePinMessage(channelId, messageId);
+  });
+
+  // for highlight pin
+  const pinIconHollow = messageItem.querySelector("#hollowPin");
+  const pinIconFill = messageItem.querySelector("#fillPin");
+  if (message.pinned) {
+    console.log("PINNED");
+    console.log(pinIconHollow);
+    pinIconFill.classList.remove("d-none");
+    pinIconHollow.classList.add("d-none");
+  } else {
+    pinIconFill.classList.add("d-none");
+    pinIconHollow.classList.remove("d-none");
+  }
+
+  messageItem.dataset.messageId = messageId; // Add a data attribute
+  messageItem.querySelector("#receipientName").textContent = userDetails.name;
+  messageItem.querySelector("#timeSent").textContent = `${timeFormatted} ${
+    message.edited ? `(edited ${formatTimeDifference(message.editedAt)})` : ""
+  }`;
+  messageItem.querySelector("#messageBody").textContent = message.message;
+
+  // Check if userDetails.image is null or undefined
+  if (userDetails.image !== null) {
+    messageProfilePic.src = userDetails.image;
+  } else {
+    // userDetails.image is null, so set the default image
+    messageProfilePic.src = "default.jpg";
+  }
+
+  // Add click event listeners to each reaction button
+  const reactionButtons = messageItem.querySelectorAll(".reaction-badge");
+
+  reactionButtons.forEach((button) => {
+    const reactionType = button.id;
+    const badgeCount = button.querySelector(".badge-count");
+    let currentCount = 0;
+    for (const reactCheck of message.reacts) {
+      if (reactCheck.react === reactionType) {
+        currentCount++;
+      }
+
+      if (
+        reactCheck.user === parseInt(globalUserId) &&
+        reactCheck.react === reactionType
+      ) {
+        button.classList.add("btn-primary");
+        button.classList.remove("btn-secondary");
+        badgeCount.classList.remove("text-bg-secondary");
+        badgeCount.classList.add("text-bg-primary");
+      }
+    }
+    badgeCount.textContent = currentCount;
+    button.addEventListener("click", () => {
+      // Send the reaction to the server or handle it as needed
+      handleReaction(reactionType, channelId, messageId);
+    });
+  });
+
+  messageItem.classList.remove("d-none");
+  return messageItem;
+}
+
+function findPinnedMessages(channelId) {
+  const batchSize = 25; // Number of messages to fetch in each API request
+  let start = 0; // Initial message index
+  const pinnedMessages = []; // Array to store pinned messages
+
+  function fetchMessages(start) {
+    const url = `message/${channelId}?start=${start}`;
+
+    // Make an API request to fetch a batch of messages
+    return apiCallGet(url, true).then((response) => {
+      const messages = response.messages;
+
+      // Filter and collect pinned messages from the current batch
+      const batchPinnedMessages = messages.filter((message) => message.pinned);
+
+      // Append batchPinnedMessages to pinnedMessages array
+      pinnedMessages.push(...batchPinnedMessages);
+
+      // If there are more messages, fetch the next batch
+      if (messages.length === batchSize) {
+        return fetchMessages(start + batchSize);
+      }
+    });
+  }
+
+  // Start fetching messages
+  return fetchMessages(start).then(() => {
+    // pinnedMessages now contains all pinned messages
+    console.log(pinnedMessages);
+    if (pinnedMessages.length > 0) {
+      displayPinnedMessages(pinnedMessages, channelId);
+    }
+  });
+}
+
+function displayPinnedMessages(pinnedMessages, channelId) {
+  const pinnedContainer = document.getElementById("pinned-message-container");
+  console.log(pinnedContainer);
+  const channelItemTemplate = document
+    .querySelector(".channel-message")
+    .cloneNode(true);
+  // Render pinned messages
+  pinnedMessages.forEach((message) => {
+    apiCallGet(`user/${parseInt(message.sender)}`, true)
+      .then((userDetails) => {
+        const messageItem = createMessageElement(
+          message,
+          userDetails,
+          channelId,
+          channelItemTemplate
+        );
+        pinnedContainer.appendChild(messageItem);
+        updatePinButtons(channelId, message.id);
+      })
+      .catch((error) => {
+        showErrorModal(error);
+      });
+  });
+  pinnedContainer.classList.remove("d-none");
+}
+
+function updatePinButtons(channelId, messageId) {
+  const messageElements = document.querySelectorAll(
+    `[data-message-id="${messageId}"]`
+  );
+  findMessageDetails(channelId, messageId, 0).then((message) => {
+    messageElements.forEach((messageItem) => {
+      const pinIconHollow = messageItem.querySelector("#hollowPin");
+      const pinIconFill = messageItem.querySelector("#fillPin");
+      if (message.pinned) {
+        console.log("PINNED");
+        console.log(pinIconHollow);
+        pinIconFill.classList.remove("d-none");
+        pinIconHollow.classList.add("d-none");
+      } else {
+        pinIconFill.classList.add("d-none");
+        pinIconHollow.classList.remove("d-none");
+      }
+    });
+  });
+}
+
+function clearPinnedMessages() {
+  const pinnedContainer = document.getElementById("pinned-message-container");
+
+  const channelItemDivs = pinnedContainer.querySelectorAll(".channel-message");
+
+  // Loop through and remove each channel item div
+  channelItemDivs.forEach((div) => {
+    console.log(div);
+    pinnedContainer.removeChild(div);
+  });
+
+  pinnedContainer.classList.add("d-none");
 }
 
 // Event handler for user login
@@ -138,6 +361,23 @@ export const handleChannelDisplay = () => {
       // Populate the channel lists
       populateChannelsList(joinedChannels, "joinedChannelContainer");
       populateChannelsList(publicChannels, "publicChannelContainer");
+
+      apiCallGet(`user/${globalUserId}`, true).then((response) => {
+        const userName = response.name;
+        const userPic = response.image;
+        const dropdownName = document.getElementById("userNameDropdown");
+        const dropdownProfilePic = document.getElementById(
+          "profilePictureDropdown"
+        );
+
+        dropdownName.textContent = userName;
+        if (userPic !== null) {
+          dropdownProfilePic.src = userPic;
+        } else {
+          // userDetails.image is null, so set the default image
+          dropdownProfilePic.src = "default.jpg";
+        }
+      });
     })
     .catch((error) => {
       showErrorModal(error);
@@ -174,21 +414,25 @@ export function handleChannelClick(channelId) {
     });
 }
 
-function deleteMessageLocal(messageId) {
-  const messageElement = document.getElementById(messageId);
+function deleteMessagesLocal(messageId) {
+  const messageElements = document.querySelectorAll(
+    `[data-message-id="${messageId}"]`
+  );
 
-  if (messageElement) {
-    // Check if the element with the provided ID exists
-    messageElement.remove(); // Remove the element from the DOM
+  if (messageElements.length > 0) {
+    // Check if any elements with the provided data-message-id exist
+    messageElements.forEach((messageElement) => {
+      messageElement.remove(); // Remove each matching element from the DOM
+    });
   } else {
-    console.log("Message not found:", messageId);
+    console.log("Messages not found:", messageId);
   }
 }
 
 function handleDeleteMessage(channelId, messageId) {
   apiCallDelete(`message/${channelId}/${messageId}`, true)
     .then((response) => {
-      deleteMessageLocal(messageId);
+      deleteMessagesLocal(messageId);
     })
     .catch((error) => {
       showErrorModal(error);
@@ -262,81 +506,107 @@ function handleSendMessage(channelId, message, textBox) {
 }
 
 function handleEditMessage(channelId, messageId) {
-  const messageCheck = document.getElementById(messageId);
-  const timeSent = messageCheck.querySelector("#timeSent");
-  const timeSentBefore = timeSent.textContent;
-  const messageBody = messageCheck.querySelector("#messageBody");
-  let messageContent = messageBody.textContent;
+  const messages = document.querySelectorAll(
+    `[data-message-id="${messageId}"]`
+  );
 
-  const editMessageForm = document.querySelector("#newMessageEdit").value; // Get the new message value
+  messages.forEach((message) => {
+    const timeSent = message.querySelector("#timeSent");
+    const messageBody = message.querySelector("#messageBody");
+    const messageContent = messageBody.textContent;
+    const editMessageForm = document.querySelector("#newMessageEdit").value;
 
-  if (messageContent === editMessageForm) {
-    showErrorModal("New Message cannot be the same as the previous message");
-    return;
-  }
+    if (messageContent === editMessageForm) {
+      showErrorModal("New Message cannot be the same as the previous message");
+      return;
+    }
 
-  if (editMessageForm.trim() === "") {
-    showErrorModal("New Message cannot be blank");
-    return;
-  }
+    if (editMessageForm.trim() === "") {
+      showErrorModal("New Message cannot be blank");
+      return;
+    }
 
-  const body = {
-    message: editMessageForm,
-  };
+    const body = {
+      message: editMessageForm,
+    };
 
-  apiCall(`message/${channelId}/${messageId}`, body, "PUT", true)
-    .then((response) => {
-      // Assuming the API response contains an edited timestamp
-      const editedTimestamp = new Date();
+    apiCall(`message/${channelId}/${messageId}`, body, "PUT", true)
+      .then((response) => {
+        const editedTimestamp = new Date();
+        const timeFormatted = formatTimeDifference(editedTimestamp);
 
-      const timeFormatted = formatTimeDifference(editedTimestamp);
+        // Extract the previous edited timestamp if it exists
+        const previousEdited = timeSent.textContent.match(/\(edited [^\)]+\)/g);
 
-      // Update the message content and the edited message time display
-      messageBody.textContent = editMessageForm;
-      timeSent.textContent = timeSentBefore + ` (edited ${timeFormatted})`;
-    })
-    .catch((error) => {
-      showErrorModal(error);
-    });
+        // Update the message content
+        messageBody.textContent = editMessageForm;
+
+        // Create the edited time display
+        const editedText = `(edited ${timeFormatted})`;
+
+        // Update the time sent with the edited timestamp
+        if (previousEdited) {
+          // Remove the previous edited timestamp
+          timeSent.textContent = timeSent.textContent.replace(
+            previousEdited[0],
+            editedText
+          );
+        } else {
+          // Append the edited timestamp
+          timeSent.textContent = `${timeSent.textContent} ${editedText}`;
+        }
+      })
+      .catch((error) => {
+        showErrorModal(error);
+      });
+  });
 }
 
 function displayReaction(channelId, messageId, reactionType) {
   findMessageDetails(channelId, messageId, 0)
     .then((message) => {
-      const messageItem = document.getElementById(messageId);
-      const reactionButtons = messageItem.querySelectorAll(".reaction-badge");
+      // Find the message item using data-message-id
+      const messageItemList = document.querySelectorAll(
+        `[data-message-id="${messageId}"]`
+      );
+      messageItemList.forEach((messageItem) => {
+        console.log(messageItem);
+        if (messageItem) {
+          const reactionButtons =
+            messageItem.querySelectorAll(".reaction-badge");
+          reactionButtons.forEach((button) => {
+            const buttonReactionType = button.id;
+            const badgeCount = button.querySelector(".badge-count");
+            let currentCount = 0;
 
-      reactionButtons.forEach((button) => {
-        const buttonReactionType = button.id;
-        const badgeCount = button.querySelector(".badge-count");
-        let currentCount = 0;
+            for (const reactCheck of message.reacts) {
+              if (reactCheck.react === buttonReactionType) {
+                currentCount++;
+              }
+            }
 
-        for (const reactCheck of message.reacts) {
-          if (reactCheck.react === buttonReactionType) {
-            currentCount++;
-          }
-        }
+            badgeCount.textContent = currentCount;
 
-        badgeCount.textContent = currentCount;
+            // Check if the current user has reacted with the same type
+            const hasReacted = message.reacts.some(
+              (reactCheck) =>
+                reactCheck.user === parseInt(globalUserId) &&
+                reactCheck.react === buttonReactionType
+            );
 
-        // Check if the current user has reacted with the same type
-        const hasReacted = message.reacts.some(
-          (reactCheck) =>
-            reactCheck.user === parseInt(globalUserId) &&
-            reactCheck.react === buttonReactionType
-        );
-
-        // Update the button's appearance if the user has reacted
-        if (hasReacted) {
-          button.classList.add("btn-primary");
-          button.classList.remove("btn-secondary");
-          badgeCount.classList.remove("text-bg-secondary");
-          badgeCount.classList.add("text-bg-primary");
-        } else {
-          button.classList.remove("btn-primary");
-          button.classList.add("btn-secondary");
-          badgeCount.classList.add("text-bg-secondary");
-          badgeCount.classList.remove("text-bg-primary");
+            // Update the button's appearance if the user has reacted
+            if (hasReacted) {
+              button.classList.add("btn-primary");
+              button.classList.remove("btn-secondary");
+              badgeCount.classList.remove("text-bg-secondary");
+              badgeCount.classList.add("text-bg-primary");
+            } else {
+              button.classList.remove("btn-primary");
+              button.classList.add("btn-secondary");
+              badgeCount.classList.add("text-bg-secondary");
+              badgeCount.classList.remove("text-bg-primary");
+            }
+          });
         }
       });
     })
@@ -491,7 +761,6 @@ function clearChannelMessages() {
   loadingIndicator.style.display = "none";
 }
 
-// Function to populate a list of channels in a specified container
 function populateChannelMessages(channelId) {
   const channelItemTemplate = document
     .querySelector(".channel-message")
@@ -508,7 +777,7 @@ function populateChannelMessages(channelId) {
     }
 
     function handleScroll(event) {
-      // When scroll reaches top
+      // When scroll reaches the top
       if (container.scrollTop === 0 && initLoad === true) {
         // Show the loading indicator while fetching new messages
         loadingIndicator.style.display = "block";
@@ -529,90 +798,15 @@ function populateChannelMessages(channelId) {
                 .then((userDetailsResponses) => {
                   newMessages.forEach((message, index) => {
                     const userDetails = userDetailsResponses[index];
-                    const messageId = message.id;
-                    const timeFormatted = formatTimeDifference(message.sentAt);
-
-                    const messageItem = channelItemTemplate.cloneNode(true);
-                    const messageProfilePic =
-                      messageItem.querySelector("#messageProfilePic");
-                    const deleteMessageButton = messageItem.querySelector(
-                      "#deleteMessageButton"
+                    const messageItem = createMessageElement(
+                      message,
+                      userDetails,
+                      channelId,
+                      channelItemTemplate
                     );
-                    const editMessageButton =
-                      messageItem.querySelector("#editButton");
-
-                    if (message.sender === parseInt(globalUserId)) {
-                      // Enable the button
-                      deleteMessageButton.addEventListener(
-                        "click",
-                        function () {
-                          openDeleteMessageModal(channelId, messageId);
-                        }
-                      );
-                      editMessageButton.addEventListener("click", function () {
-                        const messageId = message.id;
-                        openEditMessagelModal(channelId, messageId);
-                      });
-                    } else {
-                      // Disable the button
-                      editMessageButton.classList.add("d-none");
-                      deleteMessageButton.classList.add("d-none");
-                    }
-
-                    messageItem.id = `${message.id}`;
-                    messageItem.querySelector("#receipientName").textContent =
-                      userDetails.name;
-                    messageItem.querySelector(
-                      "#timeSent"
-                    ).textContent = `${timeFormatted} ${
-                      message.edited
-                        ? `(edited ${formatTimeDifference(message.editedAt)})`
-                        : ""
-                    }`;
-                    messageItem.querySelector("#messageBody").textContent =
-                      message.message;
-
-                    // Check if userDetails.image is null or undefined
-                    if (userDetails.image !== null) {
-                      messageProfilePic.src = userDetails.image;
-                    } else {
-                      // userDetails.image is null, so set the default image
-                      messageProfilePic.src = "default.jpg";
-                    }
-
-                    // Add click event listeners to each reaction button
-                    const reactionButtons =
-                      messageItem.querySelectorAll(".reaction-badge");
-
-                    reactionButtons.forEach((button) => {
-                      const reactionType = button.id;
-                      const badgeCount = button.querySelector(".badge-count");
-                      let currentCount = 0;
-                      for (const reactCheck of message.reacts) {
-                        if (reactCheck.react === reactionType) {
-                          currentCount++;
-                        }
-                        if (
-                          reactCheck.user === parseInt(globalUserId) &&
-                          reactCheck.react === reactionType
-                        ) {
-                          button.classList.add("btn-primary");
-                          button.classList.remove("btn-secondary");
-                          badgeCount.classList.remove("text-bg-secondary");
-                          badgeCount.classList.add("text-bg-primary");
-                        }
-                      }
-                      badgeCount.textContent = currentCount;
-                      button.addEventListener("click", () => {
-                        handleReaction(reactionType, channelId, messageId);
-                      });
-                    });
-
-                    messageItem.classList.remove("d-none");
                     container.insertBefore(messageItem, container.firstChild);
                     newMessagesHeight += messageItem.clientHeight;
                   });
-
                   // Update the start index
                   start += newMessages.length;
                   container.scrollTo({
@@ -638,7 +832,6 @@ function populateChannelMessages(channelId) {
           });
       }
     }
-
     container.scrollHandler = handleScroll;
     container.addEventListener("scroll", container.scrollHandler);
 
@@ -675,87 +868,14 @@ function loadMessages(channelId, template, container) {
         Promise.all(fetchUserDetailsPromises)
           .then((userDetailsResponses) => {
             for (let i = 0; i < messages.length; i++) {
-              const message = messages[i];
-              const messageId = message.id;
               const userDetails = userDetailsResponses[i];
-              const timeFormatted = formatTimeDifference(message.sentAt);
-
-              const messageItem = template.cloneNode(true);
-              const messageProfilePic =
-                messageItem.querySelector("#messageProfilePic");
-              const deleteMessageButton = messageItem.querySelector(
-                "#deleteMessageButton"
+              const messageItem = createMessageElement(
+                messages[i],
+                userDetails,
+                channelId,
+                template
               );
-              const editMessageButton =
-                messageItem.querySelector("#editButton");
-
-              if (message.sender === parseInt(globalUserId)) {
-                // Enable the button
-                deleteMessageButton.addEventListener("click", function () {
-                  openDeleteMessageModal(channelId, messageId);
-                });
-                editMessageButton.addEventListener("click", function () {
-                  openEditMessagelModal(channelId, messageId);
-                });
-              } else {
-                // Disable the button
-                editMessageButton.classList.add("d-none");
-                deleteMessageButton.classList.add("d-none");
-              }
-
-              messageItem.id = messageId;
-              messageItem.querySelector("#receipientName").textContent =
-                userDetails.name;
-              messageItem.querySelector(
-                "#timeSent"
-              ).textContent = `${timeFormatted} ${
-                message.edited
-                  ? `(edited ${formatTimeDifference(message.editedAt)})`
-                  : ""
-              }`;
-              messageItem.querySelector("#messageBody").textContent =
-                message.message;
-
-              // Check if userDetails.image is null or undefined
-              if (userDetails.image !== null) {
-                messageProfilePic.src = userDetails.image;
-              } else {
-                // userDetails.image is null, so set the default image
-                messageProfilePic.src = "default.jpg";
-              }
-
-              // Add click event listeners to each reaction button
-              const reactionButtons =
-                messageItem.querySelectorAll(".reaction-badge");
-
-              reactionButtons.forEach((button) => {
-                const reactionType = button.id;
-                const badgeCount = button.querySelector(".badge-count");
-                let currentCount = 0;
-                for (const reactCheck of message.reacts) {
-                  if (reactCheck.react === reactionType) {
-                    currentCount++;
-                  }
-
-                  if (
-                    reactCheck.user === parseInt(globalUserId) &&
-                    reactCheck.react === reactionType
-                  ) {
-                    button.classList.add("btn-primary");
-                    button.classList.remove("btn-secondary");
-                    badgeCount.classList.remove("text-bg-secondary");
-                    badgeCount.classList.add("text-bg-primary");
-                  }
-                }
-                badgeCount.textContent = currentCount;
-                button.addEventListener("click", () => {
-                  // Send the reaction to the server or handle it as needed
-                  handleReaction(reactionType, channelId, messageId);
-                });
-              });
-
-              messageItem.classList.remove("d-none");
-              container.appendChild(messageItem);
+              container.append(messageItem);
             }
 
             scrollToBottom();
@@ -840,7 +960,6 @@ export function changeChannelViewPage(channel, channelId) {
     const leaveButton = channelButtonTemplate.querySelector("#leaveChannel");
 
     if (messageSend.handleSend) {
-      console.log("removed");
       messageSend.removeEventListener("click", messageSend.handleSend);
     }
 
@@ -909,7 +1028,8 @@ export function changeChannelViewPage(channel, channelId) {
 
         privateIcon.style.display = channel.private ? "inline-block" : "none";
         publicIcon.style.display = channel.private ? "none" : "inline-block";
-
+        clearPinnedMessages();
+        findPinnedMessages(channelId);
         populateChannelMessages(channelId)
           .then(() => resolve())
           .catch((reject) => {
@@ -1127,7 +1247,7 @@ function openDeleteMessageModal(channelId, messageId) {
   uniqueDeleteMessageModal.show();
 }
 
-function openEditMessagelModal(channelId, messageId) {
+function openEditMessageModal(channelId, messageId) {
   // Create a unique modal element for this channel
   const uniqueEditMessageModal = new bootstrap.Modal(
     document.getElementById("editMessageModal")
@@ -1137,11 +1257,17 @@ function openEditMessagelModal(channelId, messageId) {
   const cancelConfirm = document.querySelectorAll(".cancel-edit-message");
   const editMessageForm = document.querySelector("#newMessageEdit");
 
-  const messageCheck = document.getElementById(messageId);
-  const messageBody = messageCheck.querySelector("#messageBody");
-  const messageContent = messageBody.textContent;
+  // Select all messages with the same data-message-id
+  const messages = document.querySelectorAll(
+    `[data-message-id="${messageId}"]`
+  );
 
-  editMessageForm.value = messageContent;
+  messages.forEach((message) => {
+    const messageBody = message.querySelector("#messageBody");
+    const messageContent = messageBody.textContent;
+
+    editMessageForm.value = messageContent;
+  });
 
   function confirmAndEditMessage() {
     handleEditMessage(channelId, messageId);
@@ -1149,18 +1275,18 @@ function openEditMessagelModal(channelId, messageId) {
     editMessageConfirm.removeEventListener("click", confirmAndEditMessage);
   }
 
-  function confirmNotEditessage() {
+  function confirmNotEditMessage() {
     uniqueEditMessageModal.hide();
     editMessageConfirm.removeEventListener("click", confirmAndEditMessage);
   }
 
   cancelConfirm.forEach((button) => {
-    button.addEventListener("click", confirmNotEditessage);
+    button.addEventListener("click", confirmNotEditMessage);
   });
 
   document.addEventListener("keydown", (event) => {
     if (event.key === "Escape") {
-      confirmNotEditessage();
+      confirmNotEditMessage();
     }
   });
 
