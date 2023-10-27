@@ -65,6 +65,35 @@ window.addEventListener("DOMContentLoaded", () => {
   populateCheckboxesWithUserNames();
 });
 
+document.addEventListener("DOMContentLoaded", function () {
+  const sidebar = document.querySelector(".sidebar");
+  const sidebarToggle = document.getElementById("sidebarToggle");
+
+  // Toggle the sidebar when the button is clicked
+  sidebarToggle.addEventListener("click", function () {
+    if (sidebar.classList.contains("d-none")) {
+      sidebar.classList.remove("d-none");
+    } else {
+      sidebar.classList.add("d-none");
+    }
+  });
+
+  // Show or hide the sidebar based on the screen width
+  function updateSidebarVisibility() {
+    if (window.innerWidth <= 900) {
+      sidebar.classList.add("d-none");
+      sidebarToggle.style.display = "block";
+    } else {
+      sidebar.classList.remove("d-none");
+      sidebarToggle.style.display = "none";
+    }
+  }
+
+  // Initialize sidebar visibility and add a window resize listener
+  updateSidebarVisibility();
+  window.addEventListener("resize", updateSidebarVisibility);
+});
+
 // Check if a valid token exists
 // Function to check token when on the homepage or any page
 function isTokenValid() {
