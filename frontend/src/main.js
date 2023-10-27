@@ -9,6 +9,7 @@ import {
   showPage,
   clearLoginForm,
   clearRegisterForm,
+  populateCheckboxesWithUserNames,
 } from "./functionBank.js";
 
 export let globalToken = null;
@@ -60,6 +61,9 @@ document
   .addEventListener("click", changeChannelViewWelcome);
 
 window.addEventListener("DOMContentLoaded", showAppropriatePage);
+window.addEventListener("DOMContentLoaded", () => {
+  populateCheckboxesWithUserNames();
+});
 
 // Check if a valid token exists
 // Function to check token when on the homepage or any page

@@ -7,12 +7,23 @@ import {
 
 import { globalUserId, showAppropriatePage } from "./main.js";
 
-// Helper function to display an error modal
 function showErrorModal(errorMessage) {
   const errorModal = document.getElementById("errorModal");
   const errorModalContent = document.getElementById("errorModalContent");
   errorModalContent.textContent = errorMessage;
   const bootstrapModal = new bootstrap.Modal(errorModal);
+
+  // Close the modal after 5 seconds
+  setTimeout(() => {
+    bootstrapModal.hide();
+  }, 5000);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      bootstrapModal.hide();
+    }
+  });
+
   bootstrapModal.show();
 }
 
@@ -87,6 +98,7 @@ function createMessageElement(message, userDetails, channelId, template) {
   const deleteMessageButton = messageItem.querySelector("#deleteMessageButton");
   const editMessageButton = messageItem.querySelector("#editButton");
   const pinMessageButton = messageItem.querySelector("#pinButton");
+  const senderName = messageItem.querySelector("#receipientName");
 
   if (message.sender === parseInt(globalUserId)) {
     editMessageButton.classList.remove("d-none");
@@ -135,6 +147,10 @@ function createMessageElement(message, userDetails, channelId, template) {
     // userDetails.image is null, so set the default image
     messageProfilePic.src = "default.jpg";
   }
+
+  senderName.addEventListener("click", function () {
+    openUserProfileModal(userDetails);
+  });
 
   // Add click event listeners to each reaction button
   const reactionButtons = messageItem.querySelectorAll(".reaction-badge");
@@ -263,10 +279,6 @@ function clearPinnedMessages() {
   });
 
   pinnedContainer.classList.add("d-none");
-}
-
-function updateProfilePicture() {
-  const buttonUpdate = document.getElementById("updateProfilePicture");
 }
 
 // Event handler for user login
@@ -671,6 +683,15 @@ function handleReaction(reactionType, channelId, messageId) {
   });
 }
 
+function handleInviteUser(channelId, userId) {
+  const body = {
+    userId: parseInt(userId),
+  };
+  apiCall(`channel/${channelId}/invite`, body, "POST", true).catch((error) => {
+    showErrorModal(error);
+  });
+}
+
 ///////////////////////////////////////////////////
 /**
  * Helper Functions
@@ -979,6 +1000,7 @@ export function changeChannelViewProfile() {
   const whileEditButtons = document.getElementById("whileEditButtons");
   const cancelEditButton = document.getElementById("cancelEditProfile");
   const saveEditButton = document.getElementById("saveEditProfile");
+  const passwordToggle = document.getElementById("passwordToggle");
 
   const dropdownProfilePic = document.getElementById("profilePictureDropdown");
 
@@ -995,6 +1017,14 @@ export function changeChannelViewProfile() {
     bioProfile.value = user.bio;
   });
 
+  passwordToggle.addEventListener("click", () => {
+    if (passwordProfile.type === "password") {
+      passwordProfile.type = "text";
+    } else {
+      passwordProfile.type = "password";
+    }
+  });
+
   editProfileButton.addEventListener("click", function () {
     // Toggle the contenteditable attribute
     emailProfile.disabled = false;
@@ -1002,6 +1032,7 @@ export function changeChannelViewProfile() {
     passwordProfile.disabled = false;
     bioProfile.disabled = false;
     imageUpload.disabled = false;
+    passwordToggle.disabled = false;
     editProfileButton.classList.add("d-none");
     whileEditButtons.classList.remove("d-none");
   });
@@ -1013,6 +1044,8 @@ export function changeChannelViewProfile() {
     passwordProfile.disabled = true;
     bioProfile.disabled = true;
     imageUpload.disabled = true;
+    passwordToggle.disabled = true;
+    passwordProfile.type = "password";
     editProfileButton.classList.remove("d-none");
     whileEditButtons.classList.add("d-none");
   });
@@ -1024,6 +1057,7 @@ export function changeChannelViewProfile() {
     passwordProfile.disabled = true;
     bioProfile.disabled = true;
     imageUpload.disabled = true;
+    passwordToggle.disabled = true;
     editProfileButton.classList.remove("d-none");
     whileEditButtons.classList.add("d-none");
     updateProfile();
@@ -1042,7 +1076,7 @@ function updateProfile() {
       const image = document.querySelector('input[type="file"]').files[0];
 
       const body = {
-        name: name, // always include name
+        name: name,
         bio: bio,
       };
 
@@ -1055,8 +1089,6 @@ function updateProfile() {
       }
 
       if (image === undefined) {
-        body.image = "null";
-        console.log(body);
         apiCall(`user`, body, "PUT", true)
           .then(() => {
             changeChannelViewProfile();
@@ -1096,7 +1128,6 @@ export function changeChannelViewPage(channel, channelId) {
     const publicIcon = document.getElementById("publicIcon");
     const messageSend = document.getElementById("messageTextSend");
     const messageSendInput = document.getElementById("messageTextInput");
-
     const channelButtonTemplate = document
       .querySelector(".channel-buttons")
       .cloneNode(true);
@@ -1106,6 +1137,7 @@ export function changeChannelViewPage(channel, channelId) {
     // Access the buttons within the clone
     const editButton = channelButtonTemplate.querySelector("#editChannel");
     const leaveButton = channelButtonTemplate.querySelector("#leaveChannel");
+    const inviteButton = channelButtonTemplate.querySelector("#inviteUsers");
 
     if (messageSend.handleSend) {
       messageSend.removeEventListener("click", messageSend.handleSend);
@@ -1140,6 +1172,10 @@ export function changeChannelViewPage(channel, channelId) {
 
     leaveButton.addEventListener("click", () => {
       openLeaveChannelModal(channel, channelId);
+    });
+
+    inviteButton.addEventListener("click", () => {
+      openInviteUsersModal(channelId);
     });
 
     messageSend.addEventListener("click", messageSend.handleSend);
@@ -1443,6 +1479,166 @@ function openEditMessageModal(channelId, messageId) {
 
   // Show the unique modal
   uniqueEditMessageModal.show();
+}
+
+function openInviteUsersModal(channelId) {
+  // Create a unique modal element for this channel
+  const uniqueInviteUserModal = new bootstrap.Modal(
+    document.getElementById("inviteUsersModal")
+  );
+
+  const inviteUsersConfirm = document.querySelector("#confirmInviteUsers");
+  const cancelConfirm = document.querySelector(".cancel-invite");
+
+  function confirmAndInvite() {
+    const checkboxes = document.querySelectorAll(
+      'input[type="checkbox"]:checked'
+    );
+    const selectedUserIds = Array.from(checkboxes).map((checkbox) => {
+      console.log(checkbox.id);
+      return checkbox.id; // Assuming the value of each checkbox is set to the user ID
+    });
+
+    // Call the handleInviteUser function with the selectedUserIds
+    selectedUserIds.forEach((userId) => {
+      handleInviteUser(channelId, userId);
+    });
+
+    // Uncheck all checkboxes
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+
+    uniqueInviteUserModal.hide();
+    inviteUsersConfirm.removeEventListener("click", confirmAndInvite);
+  }
+
+  function confirmNotInvite() {
+    // Uncheck all checkboxes
+    const checkboxes = document.querySelectorAll(
+      'input[type="checkbox"]:checked'
+    );
+    checkboxes.forEach((checkbox) => {
+      checkbox.checked = false;
+    });
+
+    uniqueInviteUserModal.hide();
+    inviteUsersConfirm.removeEventListener("click", confirmAndInvite);
+  }
+
+  cancelConfirm.addEventListener("click", confirmNotInvite);
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      confirmNotInvite();
+    }
+  });
+
+  inviteUsersConfirm.addEventListener("click", confirmAndInvite);
+
+  // Show the unique modal
+  uniqueInviteUserModal.show();
+}
+
+function openUserProfileModal(userDetails) {
+  // Create a unique modal element for this channel
+  const uniqueDeleteMessageModal = new bootstrap.Modal(
+    document.getElementById("userProfileModal")
+  );
+
+  const profilePic = document.querySelector("#profilePictureModal");
+  const name = document.querySelector("#nameProfileModal");
+  const email = document.querySelector("#emailProfileModal");
+  const bio = document.querySelector("#bioProfileModal");
+  const title = document.querySelector("#titleProfileModal");
+
+  if (userDetails.image !== null) {
+    profilePic.src = userDetails.image;
+  } else {
+    profilePic.src = "default.jpg";
+  }
+  email.value = userDetails.email;
+  name.value = userDetails.name;
+  bio.value = userDetails.bio;
+
+  title.textContent = `${userDetails.name} User Details`;
+
+  const deleteMessageConfirm = document.querySelector("#deleteMessageConfirm");
+  const cancelConfirm = document.querySelectorAll(".cancel-delete-message");
+
+  function confirmAndDeleteMessage() {
+    handleDeleteMessage(channelId, messageId);
+    uniqueDeleteMessageModal.hide();
+    deleteMessageConfirm.removeEventListener("click", confirmAndDeleteMessage);
+  }
+
+  function confirmNotDeleteMessage() {
+    uniqueDeleteMessageModal.hide();
+    deleteMessageConfirm.removeEventListener("click", confirmAndDeleteMessage);
+  }
+
+  cancelConfirm.forEach((button) => {
+    button.addEventListener("click", confirmNotDeleteMessage);
+  });
+
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape") {
+      confirmNotDeleteMessage();
+    }
+  });
+
+  deleteMessageConfirm.addEventListener("click", confirmAndDeleteMessage);
+
+  // Show the unique modal
+  uniqueDeleteMessageModal.show();
+}
+
+export function populateCheckboxesWithUserNames() {
+  apiCallGet(`user`, true)
+    .then((response) => {
+      const userIds = response.users;
+
+      userIds.forEach((userId) => {
+        apiCallGet(`user/${userId.id}`, true)
+          .then((user) => {
+            const container = document.getElementById("userCheckboxList");
+            // Create a list item element
+            const listItem = document.createElement("li");
+
+            // Create a div with a class of "checkbox"
+            const checkboxDiv = document.createElement("div");
+            checkboxDiv.classList.add("checkbox");
+
+            // Create a label element
+            const label = document.createElement("label");
+
+            // Create an input element of type "checkbox"
+            const checkbox = document.createElement("input");
+            checkbox.type = "checkbox";
+
+            checkbox.id = userId.id;
+
+            // Set the label text to the user name
+            label.textContent = user.name;
+
+            // Append the checkbox to the label, and the label to the checkbox div
+            label.prepend(checkbox);
+            checkboxDiv.appendChild(label);
+
+            // Append the checkbox div to the list item
+            listItem.appendChild(checkboxDiv);
+
+            // Append the list item to the container
+            container.appendChild(listItem);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      });
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 ///////////////////////////////////////////////////

@@ -1,350 +1,222 @@
 <!DOCTYPE html>
 <html data-bs-theme="dark">
-  <head>
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <title>Slackr</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link
-      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-      rel="stylesheet"
-      integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN"
-      crossorigin="anonymous"
-    />
-    <link
-      rel="stylesheet"
-      type="text/css"
-      media="screen"
-      href="styles/provided.css"
-    />
-    <script
-      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
-      integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
-      crossorigin="anonymous"
-    ></script>
-    <script type="module" src="src/helpers.js"></script>
-  </head>
 
-  <body>
-    <login id="login-page" class="banner px-4 py-5 my-5 text-center">
-      <image
-        class="d-block mx-auto mb-4"
-        src="./logo.jpeg"
-        width="80"
-        alt="Slackr Logo"
-      ></image>
-      <h1 class="display-5 fw-bold text-light">Welcome to Slackr</h1>
-      <h3 class="display-6 fs-6 text-white-50">
-        Please enter your email and password to login
-      </h3>
-      <div class="mb-3 col-sm-4 mx-auto mt-5 text-start">
-        <label for="emailInput" class="form-label">Email address</label>
-        <input type="email" class="form-control" id="emailInput" /><br />
-        <label for="passwordInput" class="form-label">Password</label>
-        <input type="password" class="form-control" id="passwordInput" />
-      </div>
-      <div class="d-grid gap-2 col-sm-4 mx-auto mt-4">
-        <button
-          id="loginButton"
-          type="button"
-          class="btn btn-lg btn-primary"
-          type="submit"
-        >
-          Continue
-        </button>
-      </div>
-      <footer class="mt-4">
-        <h6 class="text-secondary">New to slackr?</h6>
-        <button id="registerChangeButton" type="button" class="btn btn-link">
-          Register
-        </button>
-      </footer>
-    </login>
-    <register
-      id="register-page"
-      class="banner px-4 py-5 my-5 text-center d-none"
-    >
-      <image
-        class="d-block mx-auto mb-4"
-        src="./logo.jpeg"
-        width="80"
-        alt="Slackr Logo"
-      ></image>
-      <h1 class="display-5 fw-bold text-light">Register to Slackr</h1>
-      <div class="mb-1 col-sm-4 mx-auto mt-5 text-start">
-        <label for="emailRegisterInput" class="form-label">Email address</label>
-        <input type="email" class="form-control mb-3" id="emailRegisterInput" />
-        <label for="nameRegisterInput" class="form-label">Name</label>
-        <input type="name" class="form-control mb-3" id="nameRegisterInput" />
-        <label for="passwordRegisterInput" class="form-label">Password</label>
-        <input
-          type="password"
-          class="form-control mb-3"
-          id="passwordRegisterInput"
-        />
-        <label for="confirmPasswordRegisterInput" class="form-label"
-          >Confirm Password</label
-        >
-        <input
-          type="password"
-          class="form-control mb-3"
-          id="confirmPasswordRegisterInput"
-        />
-      </div>
-      <div class="d-grid gap-2 col-sm-4 mx-auto mt-4">
-        <button
-          id="registerButton"
-          type="button"
-          class="btn btn-lg btn-primary"
-          type="submit"
-        >
-          Continue
-        </button>
-      </div>
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Slackr</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous" />
+  <link rel="stylesheet" type="text/css" media="screen" href="styles/provided.css" />
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+  <script type="module" src="src/helpers.js"></script>
+</head>
 
-      <footer class="mt-4">
-        <h6 class="text-secondary">Already have an account?</h6>
-        <button id="loginChangeButton" type="button" class="btn btn-link">
-          Login
-        </button>
-      </footer>
-    </register>
-    <main id="main-page" class="d-flex flex-nowrap d-none" style="height: 100%">
-      <div
-        class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark"
-        style="width: 280px"
-      >
-        <a
-          id="resetPage"
-          href="#"
-          class="d-flex align-items-center mb-1 mb-md-0 me-md-auto text-white text-decoration-none"
-        >
-          <img
-            class="pe-none me-2"
-            src="./logo.jpeg"
-            width="40"
-            alt="Slackr Logo"
-          />
-          <span class="fs-2">Slackr</span>
-        </a>
-        <hr />
-        <ul class="nav nav-pills flex-column" id="joinedChannelContainer">
-          <li class="nav-item px-3 d-flex mb-2">
-            <span class="my-auto" style="flex: 1 1 0%">Joined Channels</span>
-            <div>
-              <button id="createChannel" type="button" class="btn btn-dark">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="16"
-                  height="16"
-                  fill="currentColor"
-                  class="bi bi-plus-lg"
-                  viewBox="0 0 16 16"
-                >
-                  <path
-                    fill-rule="evenodd"
-                    d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"
-                  ></path>
-                </svg>
-              </button>
-            </div>
-          </li>
-        </ul>
-        <ul
-          class="nav nav-pills flex-column mb-auto"
-          id="publicChannelContainer"
-        >
-          <li class="nav-item px-3 d-flex my-3">
-            <span class="my-auto" style="flex: 1 1 0%">Public Channels</span>
-          </li>
-        </ul>
-        <hr />
-        <div class="dropdown">
-          <a
-            href="#"
-            class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
-          >
-            <img
-              src=""
-              alt=""
-              width="32"
-              height="32"
-              id="profilePictureDropdown"
-              class="rounded-circle me-2"
-            />
-            <strong id="userNameDropdown"></strong>
-          </a>
-          <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-            <li><a class="dropdown-item" id="showProfile">Profile</a></li>
-            <li><hr class="dropdown-divider" /></li>
-            <li>
-              <a class="dropdown-item" href="#" id="logoutButton">Sign out</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-      <welcome
-        class="px-4 py-5 mx-auto my-auto text-center d-none"
-        id="welcome-screen"
-      >
-        <h1 class="display-7 fw-bold text-body-secondary">Slackr</h1>
-        <div class="mx-auto">
-          <p class="mb-4 text-secondary">Select a Channel!</p>
-        </div>
-      </welcome>
-      <channel
-        class="mt-4 mx-5 ps-lg-2 w-100 d-flex flex-column d-none"
-        id="channelInfoPage"
-      >
-        <div class="fs-2 d-flex justify-content-between mb-1">
+<body>
+  <login id="login-page" class="banner px-4 py-5 my-5 text-center">
+    <image class="d-block mx-auto mb-4" src="./logo.jpeg" width="80" alt="Slackr Logo"></image>
+    <h1 class="display-5 fw-bold text-light">Welcome to Slackr</h1>
+    <h3 class="display-6 fs-6 text-white-50">
+      Please enter your email and password to login
+    </h3>
+    <div class="mb-3 col-sm-4 mx-auto mt-5 text-start">
+      <label for="emailInput" class="form-label">Email address</label>
+      <input type="email" class="form-control" id="emailInput" /><br />
+      <label for="passwordInput" class="form-label">Password</label>
+      <input type="password" class="form-control" id="passwordInput" />
+    </div>
+    <div class="d-grid gap-2 col-sm-4 mx-auto mt-4">
+      <button id="loginButton" type="button" class="btn btn-lg btn-primary" type="submit">
+        Continue
+      </button>
+    </div>
+    <footer class="mt-4">
+      <h6 class="text-secondary">New to slackr?</h6>
+      <button id="registerChangeButton" type="button" class="btn btn-link">
+        Register
+      </button>
+    </footer>
+  </login>
+  <register id="register-page" class="banner px-4 py-5 my-5 text-center d-none">
+    <image class="d-block mx-auto mb-4" src="./logo.jpeg" width="80" alt="Slackr Logo"></image>
+    <h1 class="display-5 fw-bold text-light">Register to Slackr</h1>
+    <div class="mb-1 col-sm-4 mx-auto mt-5 text-start">
+      <label for="emailRegisterInput" class="form-label">Email address</label>
+      <input type="email" class="form-control mb-3" id="emailRegisterInput" />
+      <label for="nameRegisterInput" class="form-label">Name</label>
+      <input type="name" class="form-control mb-3" id="nameRegisterInput" />
+      <label for="passwordRegisterInput" class="form-label">Password</label>
+      <input type="password" class="form-control mb-3" id="passwordRegisterInput" />
+      <label for="confirmPasswordRegisterInput" class="form-label">Confirm Password</label>
+      <input type="password" class="form-control mb-3" id="confirmPasswordRegisterInput" />
+    </div>
+    <div class="d-grid gap-2 col-sm-4 mx-auto mt-4">
+      <button id="registerButton" type="button" class="btn btn-lg btn-primary" type="submit">
+        Continue
+      </button>
+    </div>
+
+    <footer class="mt-4">
+      <h6 class="text-secondary">Already have an account?</h6>
+      <button id="loginChangeButton" type="button" class="btn btn-link">
+        Login
+      </button>
+    </footer>
+  </register>
+  <main id="main-page" class="d-flex flex-nowrap d-none" style="height: 100%">
+    <div class="d-flex flex-column flex-shrink-0 p-3 text-bg-dark" style="width: 280px">
+      <a id="resetPage" href="#"
+        class="d-flex align-items-center mb-1 mb-md-0 me-md-auto text-white text-decoration-none">
+        <img class="pe-none me-2" src="./logo.jpeg" width="40" alt="Slackr Logo" />
+        <span class="fs-2">Slackr</span>
+      </a>
+      <hr />
+      <ul class="nav nav-pills flex-column" id="joinedChannelContainer">
+        <li class="nav-item px-3 d-flex mb-2">
+          <span class="my-auto" style="flex: 1 1 0%">Joined Channels</span>
           <div>
-            <svg
-              id="channelIcon"
-              xmlns="http://www.w3.org/2000/svg"
-              width="16"
-              height="16"
-              fill="currentColor"
-              class="bi bi-lock"
-              viewBox="0 0 16 16"
-            >
-              <path
-                id="privateIcon"
-                d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"
-              ></path>
-              <path
-                id="publicIcon"
-                d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
-              />
-            </svg>
-            <h2 id="channelViewName" class="d-inline-block"></h2>
-          </div>
-          <div>
-            <div class="channel-buttons-container"></div>
-          </div>
-        </div>
-        <div>
-          <p class="text-secondary-emphasis" id="channelViewDescription"></p>
-          <p class="text-secondary" id="channelCreator"></p>
-        </div>
-        <hr />
-        <pinned class="d-none" id="pinned-message-container"
-          ><h5 class="mb-3">Pinned</h5></pinned
-        >
-        <message class="message-container">
-          <h5 class="mb-3">Messages</h5>
-          <div class="message-container-list" id="message-container-list"></div>
-          <div id="loading-indicator" class="loading-indicator">
-            <div class="spinner-border text-primary" role="status">
-              <span class="visually-hidden">Loading...</span>
-            </div>
-            <p>Loading more messages...</p>
-          </div>
-          <div class="input-group my-3">
-            <input
-              type="text"
-              class="form-control"
-              placeholder="Type a message"
-              aria-label="Type a message"
-              id="messageTextInput"
-            />
-            <button
-              class="btn btn-outline-secondary input-group-text"
-              id="messageTextSend"
-            >
-              Send Message &nbsp;
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-send"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z"
-                ></path>
+            <button id="createChannel" type="button" class="btn btn-dark">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg"
+                viewBox="0 0 16 16">
+                <path fill-rule="evenodd"
+                  d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z">
+                </path>
               </svg>
             </button>
           </div>
-        </message>
-      </channel>
-      <profile class="text-center m-5 w-100 d-none" id="profileScreen">
-        <h1>Profile</h1>
-        <h4 class="text-secondary">Edit your profile here</h4>
-        <img
-          src=""
-          alt=""
-          width="100"
-          height="100"
-          id="profilePicturePage"
-          class="rounded-circle me-2"
-        />
+        </li>
+      </ul>
+      <ul class="nav nav-pills flex-column mb-auto" id="publicChannelContainer">
+        <li class="nav-item px-3 d-flex my-3">
+          <span class="my-auto" style="flex: 1 1 0%">Public Channels</span>
+        </li>
+      </ul>
+      <hr />
+      <div class="dropdown">
+        <a href="#" class="d-flex align-items-center text-white text-decoration-none dropdown-toggle"
+          data-bs-toggle="dropdown" aria-expanded="false">
+          <img src="" alt="" width="32" height="32" id="profilePictureDropdown" class="rounded-circle me-2" />
+          <strong id="userNameDropdown"></strong>
+        </a>
+        <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
+          <li><a class="dropdown-item" id="showProfile">Profile</a></li>
+          <li>
+            <hr class="dropdown-divider" />
+          </li>
+          <li>
+            <a class="dropdown-item" href="#" id="logoutButton">Sign out</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <welcome class="px-4 py-5 mx-auto my-auto text-center" id="welcome-screen">
+      <h1 class="display-7 fw-bold text-body-secondary">Slackr</h1>
+      <div class="mx-auto">
+        <p class="mb-4 text-secondary">Select a Channel!</p>
+      </div>
+    </welcome>
+    <channel class="mt-4 mx-5 ps-lg-2 w-100 d-flex flex-column d-none" id="channelInfoPage">
+      <div class="fs-2 d-flex justify-content-between mb-1">
+        <div>
+          <svg id="channelIcon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-lock" viewBox="0 0 16 16">
+            <path id="privateIcon"
+              d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z">
+            </path>
+            <path id="publicIcon"
+              d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z" />
+          </svg>
+          <h2 id="channelViewName" class="d-inline-block"></h2>
+        </div>
+        <div>
+          <div class="channel-buttons-container"></div>
+        </div>
+      </div>
+      <div>
+        <p class="text-secondary-emphasis" id="channelViewDescription"></p>
+        <p class="text-secondary" id="channelCreator"></p>
+      </div>
+      <hr />
+      <pinned class="d-none" id="pinned-message-container">
+        <h5 class="mb-3">Pinned</h5>
+      </pinned>
+      <message class="message-container">
+        <h5 class="mb-3">Messages</h5>
+        <div class="message-container-list" id="message-container-list"></div>
+        <div id="loading-indicator" class="loading-indicator">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+          <p>Loading more messages...</p>
+        </div>
+        <div class="input-group my-3">
+          <input type="text" class="form-control" placeholder="Type a message" aria-label="Type a message"
+            id="messageTextInput" />
+          <button class="btn btn-outline-secondary input-group-text" id="messageTextSend">
+            Send Message &nbsp;
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send"
+              viewBox="0 0 16 16">
+              <path
+                d="M15.854.146a.5.5 0 0 1 .11.54l-5.819 14.547a.75.75 0 0 1-1.329.124l-3.178-4.995L.643 7.184a.75.75 0 0 1 .124-1.33L15.314.037a.5.5 0 0 1 .54.11ZM6.636 10.07l2.761 4.338L14.13 2.576 6.636 10.07Zm6.787-8.201L1.591 6.602l4.339 2.76 7.494-7.493Z">
+              </path>
+            </svg>
+          </button>
+        </div>
+      </message>
+    </channel>
+    <profile class="text-center m-5 w-100 d-none" id="profileScreen">
+      <h1>Profile</h1>
+      <h4 class="text-secondary">Edit your profile here</h4>
+      <img src="" alt="" width="100" height="100" id="profilePicturePage" class="rounded-circle me-2" />
 
-        <div class="mb-1 col-sm-5 mx-auto mt-3 text-start">
-          <label for="emailProfile" class="form-label">Email address</label>
-          <input
-            type="email"
-            class="form-control mb-3"
-            id="emailProfile"
-            disabled
-          />
-          <label for="nameProfile" class="form-label">Name</label>
-          <input
-            type="name"
-            class="form-control mb-3"
-            id="nameProfile"
-            disabled
-          />
-          <label for="passwordProfile" class="form-label">Password</label>
-          <input
-            type="password"
-            class="form-control mb-3"
-            id="passwordProfile"
-            disabled
-          />
-          <label for="bioProfile" class="form-label">Bio</label>
-          <textarea
-            type="password"
-            class="form-control mb-3"
-            id="bioProfile"
-            disabled
-          ></textarea>
-          <input
-            type="file"
-            class="form-control"
-            id="imageUploader"
-            aria-describedby="imageUploader"
-            aria-label="Upload"
-            disabled
-          />
-          <div class="d-grid gap-2 mt-4">
-            <button
-              class="btn btn-primary"
-              type="button"
-              id="editProfileButton"
-            >
-              Edit Profile
-            </button>
-            <div class="row d-none" id="whileEditButtons">
-              <div class="col-6 d-grid">
-                <button class="btn btn-secondary" id="cancelEditProfile">
-                  Cancel
-                </button>
-              </div>
-              <div class="col-6 d-grid">
-                <button class="btn btn-primary" id="saveEditProfile">
-                  Save Changes
-                </button>
-              </div>
+      <div class="mb-1 col-sm-5 mx-auto mt-3 text-start">
+        <label for="emailProfile" class="form-label">Email address</label>
+        <input type="email" class="form-control mb-3" id="emailProfile" disabled />
+        <label for="nameProfile" class="form-label">Name</label>
+        <input type="name" class="form-control mb-3" id="nameProfile" disabled />
+        <label for="passwordProfile" class="form-label">Password</label>
+        <div class="input-group mb-3">
+          <input type="password" class="form-control" id="passwordProfile" disabled />
+          <button class="btn" id="passwordToggle" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-eye"
+              viewBox="0 0 16 16">
+              <path
+                d="M16 8s-3-5.5-8-5.5S0 8 0 8s3 5.5 8 5.5S16 8 16 8zM1.173 8a13.133 13.133 0 0 1 1.66-2.043C4.12 4.668 5.88 3.5 8 3.5c2.12 0 3.879 1.168 5.168 2.457A13.133 13.133 0 0 1 14.828 8c-.058.087-.122.183-.195.288-.335.48-.83 1.12-1.465 1.755C11.879 11.332 10.119 12.5 8 12.5c-2.12 0-3.879-1.168-5.168-2.457A13.134 13.134 0 0 1 1.172 8z">
+              </path>
+              <path d="M8 5.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5zM4.5 8a3.5 3.5 0 1 1 7 0 3.5 3.5 0 0 1-7 0z"></path>
+            </svg>
+          </button>
+        </div>
+        <label for="bioProfile" class="form-label">Bio</label>
+        <textarea type="text" class="form-control mb-3" id="bioProfile" disabled></textarea>
+        <input type="file" class="form-control" id="imageUploader" aria-describedby="imageUploader" aria-label="Upload"
+          disabled />
+        <div class="d-grid gap-2 mt-4">
+          <button class="btn btn-primary" type="button" id="editProfileButton">
+            Edit Profile
+          </button>
+          <div class="row d-none" id="whileEditButtons">
+            <div class="col-6 d-grid">
+              <button class="btn btn-secondary" id="cancelEditProfile">
+                Cancel
+              </button>
+            </div>
+            <div class="col-6 d-grid">
+              <button class="btn btn-primary" id="saveEditProfile">
+                Save Changes
+              </button>
             </div>
           </div>
         </div>
-      </profile>
-    </main>
-    <script type="module" src="src/main.js"></script>
-  </body>
+      </div>
+    </profile>
+  </main>
+  <script type="module" src="src/main.js"></script>
+</body>
+
 </html>
 
 <!-- Modal Resting Page -->
@@ -353,11 +225,7 @@
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title">Error Occurred</h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
       <div class="modal-body" id="errorModalContent"></div>
       <div class="modal-footer">
@@ -370,60 +238,33 @@
 </div>
 
 <!-- Create Channel Modal -->
-<div
-  class="modal fade"
-  id="createChannelModal"
-  tabindex="-1"
-  aria-labelledby="createChannelModal"
-  aria-hidden="true"
->
+<div class="modal fade" id="createChannelModal" tabindex="-1" aria-labelledby="createChannelModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="newChannelLabel">
           Create a New Channel
         </h1>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label for="channel-name" class="col-form-label"
-              >Channel Name:</label
-            >
+            <label for="channel-name" class="col-form-label">Channel Name:</label>
             <input type="text" class="form-control" id="channelNameInput" />
           </div>
           <div class="mb-3">
-            <label for="description-text" class="col-form-label"
-              >Description:</label
-            >
+            <label for="description-text" class="col-form-label">Description:</label>
             <textarea class="form-control" id="descriptionInput"></textarea>
           </div>
           <div class="form-check form-switch">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="setPrivateChannel"
-            />
-            <label class="form-check-label" for="setPrivateChannel"
-              >Set Private Channel?</label
-            >
+            <input class="form-check-input" type="checkbox" role="switch" id="setPrivateChannel" />
+            <label class="form-check-label" for="setPrivateChannel">Set Private Channel?</label>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="createChannelButton"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-primary" id="createChannelButton" data-bs-dismiss="modal">
           Create Channel
         </button>
       </div>
@@ -432,61 +273,32 @@
 </div>
 
 <!-- Invite Users Modal -->
-<div
-  class="modal fade"
-  id="inviteUsersModal"
-  tabindex="-1"
-  aria-labelledby="inviteUsersModal"
-  aria-hidden="true"
->
+<div class="modal fade" id="inviteUsersModal" tabindex="-1" aria-labelledby="inviteUsersModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="inviteUsersLabel">
           Invite Users To Channel
         </h1>
-        <button
-          type="button"
-          class="btn-close cancel-invite"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close cancel-invite" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label for="channel-name" class="col-form-label"
-              >Channel Name:</label
-            >
-            <input type="text" class="form-control" id="channelNameInput" />
-          </div>
-          <div class="mb-3">
-            <label for="description-text" class="col-form-label"
-              >Description:</label
-            >
-            <textarea class="form-control" id="descriptionInput"></textarea>
-          </div>
-          <div class="form-check form-switch">
-            <input
-              class="form-check-input"
-              type="checkbox"
-              role="switch"
-              id="setPrivateChannel"
-            />
-            <label class="form-check-label" for="setPrivateChannel"
-              >Set Private Channel?</label
-            >
+            <label for="channel-name" class="col-form-label">Invite User(s)</label>
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                data-bs-auto-close="outside" aria-expanded="false">
+                User List
+              </button>
+              <ul class="dropdown-menu dropdown-menu-dark" id="userCheckboxList"></ul>
+            </div>
           </div>
         </form>
       </div>
       <div class="modal-footer">
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="createChannelButton"
-          data-bs-dismiss="modal"
-        >
-          Create Channel
+        <button type="button" class="btn btn-primary" id="confirmInviteUsers" data-bs-dismiss="modal">
+          Invite Users
         </button>
       </div>
     </div>
@@ -494,35 +306,21 @@
 </div>
 
 <!-- Edit Channel Modal -->
-<div
-  class="modal fade"
-  id="editChannelModal"
-  tabindex="-1"
-  aria-labelledby="editChannelModal"
-  aria-hidden="true"
->
+<div class="modal fade" id="editChannelModal" tabindex="-1" aria-labelledby="editChannelModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="editChannelLabel">Edit Channel</h1>
-        <button
-          type="button"
-          class="btn-close cancel-edit"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close cancel-edit" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <form>
           <div class="mb-3">
-            <label for="edit-channel-name" class="col-form-label"
-              >Channel Name:</label
-            >
+            <label for="edit-channel-name" class="col-form-label">Channel Name:</label>
             <input type="text" class="form-control" id="editChannelName" />
           </div>
           <div class="mb-3">
-            <label for="edit-description-text" class="col-form-label"
-              >Description:</label
-            >
+            <label for="edit-description-text" class="col-form-label">Description:</label>
             <textarea class="form-control" id="editDescription"></textarea>
           </div>
         </form>
@@ -538,46 +336,24 @@
 
 <!-- Channel Template for PublicChannels -->
 <a class="channel-item d-flex btn btn-dark align-items-center mt-1 d-none">
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
-    class="bi bi-unlock"
-    viewBox="0 0 16 16"
-  >
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-unlock"
+    viewBox="0 0 16 16">
     <path
-      d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z"
-    />
+      d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h5V3a3 3 0 0 1 6 0v4a.5.5 0 0 1-1 0V3a2 2 0 0 0-2-2zM3 8a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V9a1 1 0 0 0-1-1H3z" />
   </svg>
-  <span
-    id="channelName"
-    class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary"
-    style="flex: 1 1 0%"
-  ></span>
+  <span id="channelName" class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary"
+    style="flex: 1 1 0%"></span>
 </a>
 
 <!-- Channel Template for Private Channels -->
-<a
-  class="channel-item-private d-flex btn btn-dark align-items-center mt-1 d-none"
->
-  <svg
-    xmlns="http://www.w3.org/2000/svg"
-    width="16"
-    height="16"
-    fill="currentColor"
-    class="bi bi-lock"
-    viewBox="0 0 16 16"
-  >
+<a class="channel-item-private d-flex btn btn-dark align-items-center mt-1 d-none">
+  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lock"
+    viewBox="0 0 16 16">
     <path
-      d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"
-    />
+      d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2zM5 8h6a1 1 0 0 1 1 1v5a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z" />
   </svg>
-  <span
-    id="channelName"
-    class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary"
-    style="flex: 1 1 0%"
-  ></span>
+  <span id="channelName" class="my-auto text-start list-group-item list-group-item-action ps-4 text-body-secondary"
+    style="flex: 1 1 0%"></span>
 </a>
 
 <!-- Template for Edit Channels and Leave Channels -->
@@ -594,22 +370,12 @@
 </div>
 
 <!-- Leave Channel Modal -->
-<div
-  class="modal fade"
-  id="leaveChannelModal"
-  tabindex="-1"
-  aria-labelledby="leaveChannelModal"
-  aria-hidden="true"
->
+<div class="modal fade" id="leaveChannelModal" tabindex="-1" aria-labelledby="leaveChannelModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="leaveChannelLabel">Leave Channel</h1>
-        <button
-          type="button"
-          class="btn-close cancel-leave"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close cancel-leave" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="leaveChannelMessage"></div>
       <div class="modal-footer">
@@ -625,22 +391,12 @@
 </div>
 
 <!-- Join Channel Modal -->
-<div
-  class="modal fade"
-  id="joinChannelModal"
-  tabindex="-1"
-  aria-labelledby="joinChannelModal"
-  aria-hidden="true"
->
+<div class="modal fade" id="joinChannelModal" tabindex="-1" aria-labelledby="joinChannelModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="joinChannelLabel">Join Channel</h1>
-        <button
-          type="button"
-          class="btn-close cancel-join"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close cancel-join" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="joinChannelMessage">
         You have not joined this channel. Would you like to join?
@@ -649,12 +405,7 @@
         <button type="button" class="btn btn-secondary cancel-join">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-primary"
-          id="joinChannelConfirm"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-primary" id="joinChannelConfirm" data-bs-dismiss="modal">
           Join Channel
         </button>
       </div>
@@ -663,22 +414,12 @@
 </div>
 
 <!-- Delete Message Modal -->
-<div
-  class="modal fade"
-  id="deleteMessageModal"
-  tabindex="-1"
-  aria-labelledby="deleteMessageModal"
-  aria-hidden="true"
->
+<div class="modal fade" id="deleteMessageModal" tabindex="-1" aria-labelledby="deleteMessageModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h1 class="modal-title fs-5" id="deleteMessageLabel">Delete Message</h1>
-        <button
-          type="button"
-          class="btn-close cancel-delete-message"
-          aria-label="Close"
-        ></button>
+        <button type="button" class="btn-close cancel-delete-message" aria-label="Close"></button>
       </div>
       <div class="modal-body" id="deleteMessageTitle">
         Are you sure you want to delete this message?
@@ -687,12 +428,7 @@
         <button type="button" class="btn btn-secondary cancel-delete-message">
           Cancel
         </button>
-        <button
-          type="button"
-          class="btn btn-danger"
-          id="deleteMessageConfirm"
-          data-bs-dismiss="modal"
-        >
+        <button type="button" class="btn btn-danger" id="deleteMessageConfirm" data-bs-dismiss="modal">
           Delete Message
         </button>
       </div>
@@ -700,147 +436,120 @@
   </div>
 </div>
 
-<!-- Message Template -->
-<div class="d-none channel-message d-flex gap-3 w-100">
-  <div>
-    <img
-      id="messageProfilePic"
-      class="rounded-circle"
-      src=""
-      style="width: 45px; height: 45px"
-    />
-  </div>
-  <div class="w-100">
-    <div class="d-flex justify-content-between">
-      <div class="d-flex align-items-center gap-2">
-        <p class="mb-1" id="receipientName">Receipient</p>
-        <p
-          style="font-size: 0.75em"
-          class="text-secondary-emphasis mb-1"
-          id="timeSent"
-        >
-          2 hours ago
-        </p>
-      </div>
-
-      <div class="message-buttons d-flex align-items-center gap-1">
-        <button class="btn p-0 m-1" id="pinButton">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-pin-angle"
-            viewBox="0 0 16 16"
-            id="hollowPin"
-          >
-            <path
-              d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z"
-            />
-          </svg>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-pin-angle-fill d-none"
-            viewBox="0 0 16 16"
-            id="fillPin"
-          >
-            <path
-              d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z"
-            />
-          </svg>
-        </button>
-        <button class="btn p-0 m-1" id="editButton">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-pencil"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z"
-            />
-          </svg>
-        </button>
-        <button class="btn p-0 m-1" id="deleteMessageButton">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            fill="currentColor"
-            class="bi bi-trash"
-            viewBox="0 0 16 16"
-          >
-            <path
-              d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z"
-            />
-            <path
-              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z"
-            />
-          </svg>
-        </button>
-      </div>
-    </div>
-    <p class="fw-light mb-0" style="font-size: 0.9em" id="messageBody">
-      Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa tempora et
-      deserunt laudantium assumenda rerum illo, dolorum laboriosam voluptas
-      animi nostrum? Repellendus incidunt veritatis eius optio accusamus laborum
-      earum mollitia.
-    </p>
-    <div class="mt-1 mb-3">
-      <button class="btn btn-secondary btn-sm reaction-badge" id="thumbsUp">
-        👍<span class="badge badge-count text-bg-secondary">0</span>
-      </button>
-      <button class="btn btn-secondary btn-sm reaction-badge" id="fire">
-        🔥<span class="badge badge-count text-bg-secondary">0</span>
-      </button>
-      <button class="btn btn-secondary btn-sm reaction-badge" id="heart">
-        ❤️<span class="badge badge-count text-bg-secondary">0</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<!-- Edit Channel Modal -->
-<div
-  class="modal fade"
-  id="editMessageModal"
-  tabindex="-1"
-  aria-labelledby="editMessageModal"
-  aria-hidden="true"
->
+<!-- User Profile Modal -->
+<div class="modal modal-lg fade" id="userProfileModal" tabindex="-1" aria-labelledby="userProfileModal"
+  aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h1 class="modal-title fs-5" id="editMessageLabel">Edit Message</h1>
-        <button
-          type="button"
-          class="btn-close cancel-edit-message"
-          aria-label="Close"
-        ></button>
+        <h1 class="modal-title fs-5" id="userProfileLabel"></h1>
+        <button type="button" class="btn-close cancel-delete-message" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <form>
-          <div class="mb-3">
-            <label for="edit-message-text" class="col-form-label"
-              >New Message:</label
-            >
-            <textarea class="form-control" id="newMessageEdit"></textarea>
-          </div>
-        </form>
+      <div class="modal-body text-center">
+        <h3 id="titleProfileModal"></h3>
+        <img src="" alt="" width="100" height="100" id="profilePictureModal" class="rounded-circle me-2" />
+        <div class="mb-1 col-sm-5 mx-auto mt-3 text-start">
+          <label for="emailProfileModal" class="form-label">Email address</label>
+          <input type="email" class="form-control mb-3" id="emailProfileModal" disabled />
+          <label for="nameProfileModal" class="form-label">Name</label>
+          <input type="name" class="form-control mb-3" id="nameProfileModal" disabled />
+          <label for="bioProfileModal" class="form-label">Bio</label>
+          <textarea type="password" class="form-control mb-3" id="bioProfileModal" disabled></textarea>
+        </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary cancel-edit-message">
-          Cancel
+    </div>
+  </div>
+
+  <!-- Message Template -->
+  <div class="d-none channel-message d-flex gap-3 w-100">
+    <div>
+      <img id="messageProfilePic" class="rounded-circle" src="" style="width: 45px; height: 45px" />
+    </div>
+    <div class="w-100">
+      <div class="d-flex justify-content-between">
+        <div class="d-flex align-items-center gap-2">
+          <a class="mb-1 link-light link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover"
+            id="receipientName">Receipient<a />
+            <p style="font-size: 0.75em" class="text-secondary-emphasis mb-1" id="timeSent">
+              2 hours ago
+            </p>
+        </div>
+
+        <div class="message-buttons d-flex align-items-center gap-1">
+          <button class="btn p-0 m-1" id="pinButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle"
+              viewBox="0 0 16 16" id="hollowPin">
+              <path
+                d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+              class="bi bi-pin-angle-fill d-none" viewBox="0 0 16 16" id="fillPin">
+              <path
+                d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z" />
+            </svg>
+          </button>
+          <button class="btn p-0 m-1" id="editButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil"
+              viewBox="0 0 16 16">
+              <path
+                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+            </svg>
+          </button>
+          <button class="btn p-0 m-1" id="deleteMessageButton">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+              viewBox="0 0 16 16">
+              <path
+                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+              <path
+                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+            </svg>
+          </button>
+        </div>
+      </div>
+      <p class="fw-light mb-0" style="font-size: 0.9em" id="messageBody">
+        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa tempora et
+        deserunt laudantium assumenda rerum illo, dolorum laboriosam voluptas
+        animi nostrum? Repellendus incidunt veritatis eius optio accusamus laborum
+        earum mollitia.
+      </p>
+      <div class="mt-1 mb-3">
+        <button class="btn btn-secondary btn-sm reaction-badge" id="thumbsUp">
+          👍<span class="badge badge-count text-bg-secondary">0</span>
         </button>
-        <button type="button" class="btn btn-primary" id="editMessageButton">
-          Save Changes
+        <button class="btn btn-secondary btn-sm reaction-badge" id="fire">
+          🔥<span class="badge badge-count text-bg-secondary">0</span>
+        </button>
+        <button class="btn btn-secondary btn-sm reaction-badge" id="heart">
+          ❤️<span class="badge badge-count text-bg-secondary">0</span>
         </button>
       </div>
     </div>
   </div>
-</div>
+
+  <!-- Edit Channel Modal -->
+  <div class="modal fade" id="editMessageModal" tabindex="-1" aria-labelledby="editMessageModal" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="editMessageLabel">Edit Message</h1>
+          <button type="button" class="btn-close cancel-edit-message" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label for="edit-message-text" class="col-form-label">New Message:</label>
+              <textarea class="form-control" id="newMessageEdit"></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary cancel-edit-message">
+            Cancel
+          </button>
+          <button type="button" class="btn btn-primary" id="editMessageButton">
+            Save Changes
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
