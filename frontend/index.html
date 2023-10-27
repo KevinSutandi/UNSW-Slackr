@@ -174,10 +174,10 @@
               id="profilePictureDropdown"
               class="rounded-circle me-2"
             />
-            <strong id="userNameDropdown">mdo</strong>
+            <strong id="userNameDropdown"></strong>
           </a>
           <ul class="dropdown-menu dropdown-menu-dark text-small shadow">
-            <li><a class="dropdown-item" href="#">Profile</a></li>
+            <li><a class="dropdown-item" id="showProfile">Profile</a></li>
             <li><hr class="dropdown-divider" /></li>
             <li>
               <a class="dropdown-item" href="#" id="logoutButton">Sign out</a>
@@ -185,13 +185,16 @@
           </ul>
         </div>
       </div>
-      <div class="px-4 py-5 mx-auto my-auto text-center" id="welcome-screen">
+      <welcome
+        class="px-4 py-5 mx-auto my-auto text-center d-none"
+        id="welcome-screen"
+      >
         <h1 class="display-7 fw-bold text-body-secondary">Slackr</h1>
         <div class="mx-auto">
           <p class="mb-4 text-secondary">Select a Channel!</p>
         </div>
-      </div>
-      <div
+      </welcome>
+      <channel
         class="mt-4 mx-5 ps-lg-2 w-100 d-flex flex-column d-none"
         id="channelInfoPage"
       >
@@ -266,7 +269,79 @@
             </button>
           </div>
         </message>
-      </div>
+      </channel>
+      <profile class="text-center m-5 w-100 d-none" id="profileScreen">
+        <h1>Profile</h1>
+        <h4 class="text-secondary">Edit your profile here</h4>
+        <img
+          src=""
+          alt=""
+          width="100"
+          height="100"
+          id="profilePicturePage"
+          class="rounded-circle me-2"
+        />
+
+        <div class="mb-1 col-sm-5 mx-auto mt-3 text-start">
+          <label for="emailProfile" class="form-label">Email address</label>
+          <input
+            type="email"
+            class="form-control mb-3"
+            id="emailProfile"
+            disabled
+          />
+          <label for="nameProfile" class="form-label">Name</label>
+          <input
+            type="name"
+            class="form-control mb-3"
+            id="nameProfile"
+            disabled
+          />
+          <label for="passwordProfile" class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-control mb-3"
+            id="passwordProfile"
+            disabled
+          />
+          <label for="bioProfile" class="form-label">Bio</label>
+          <textarea
+            type="password"
+            class="form-control mb-3"
+            id="bioProfile"
+            disabled
+          ></textarea>
+          <input
+            type="file"
+            class="form-control"
+            id="imageUploader"
+            aria-describedby="imageUploader"
+            aria-label="Upload"
+            disabled
+          />
+          <div class="d-grid gap-2 mt-4">
+            <button
+              class="btn btn-primary"
+              type="button"
+              id="editProfileButton"
+            >
+              Edit Profile
+            </button>
+            <div class="row d-none" id="whileEditButtons">
+              <div class="col-6 d-grid">
+                <button class="btn btn-secondary" id="cancelEditProfile">
+                  Cancel
+                </button>
+              </div>
+              <div class="col-6 d-grid">
+                <button class="btn btn-primary" id="saveEditProfile">
+                  Save Changes
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </profile>
     </main>
     <script type="module" src="src/main.js"></script>
   </body>
@@ -311,6 +386,68 @@
         <button
           type="button"
           class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="channel-name" class="col-form-label"
+              >Channel Name:</label
+            >
+            <input type="text" class="form-control" id="channelNameInput" />
+          </div>
+          <div class="mb-3">
+            <label for="description-text" class="col-form-label"
+              >Description:</label
+            >
+            <textarea class="form-control" id="descriptionInput"></textarea>
+          </div>
+          <div class="form-check form-switch">
+            <input
+              class="form-check-input"
+              type="checkbox"
+              role="switch"
+              id="setPrivateChannel"
+            />
+            <label class="form-check-label" for="setPrivateChannel"
+              >Set Private Channel?</label
+            >
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-primary"
+          id="createChannelButton"
+          data-bs-dismiss="modal"
+        >
+          Create Channel
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Invite Users Modal -->
+<div
+  class="modal fade"
+  id="inviteUsersModal"
+  tabindex="-1"
+  aria-labelledby="inviteUsersModal"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="inviteUsersLabel">
+          Invite Users To Channel
+        </h1>
+        <button
+          type="button"
+          class="btn-close cancel-invite"
           data-bs-dismiss="modal"
           aria-label="Close"
         ></button>
@@ -447,6 +584,9 @@
 <div class="gap-4 channel-buttons d-none">
   <button id="editChannel" class="btn btn-outline-secondary">
     Edit Channel Details
+  </button>
+  <button id="inviteUsers" class="btn btn-outline-secondary">
+    Invite Users
   </button>
   <button id="leaveChannel" class="btn btn-outline-danger">
     Leave Channel

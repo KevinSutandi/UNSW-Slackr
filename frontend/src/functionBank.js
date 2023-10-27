@@ -265,6 +265,10 @@ function clearPinnedMessages() {
   pinnedContainer.classList.add("d-none");
 }
 
+function updateProfilePicture() {
+  const buttonUpdate = document.getElementById("updateProfilePicture");
+}
+
 // Event handler for user login
 export const handleLogin = () => {
   const emailInput = document.getElementById("emailInput");
@@ -369,6 +373,11 @@ export const handleChannelDisplay = () => {
         const dropdownProfilePic = document.getElementById(
           "profilePictureDropdown"
         );
+        const showProfile = document.getElementById("showProfile");
+
+        showProfile.addEventListener("click", function () {
+          changeChannelViewProfile();
+        });
 
         dropdownName.textContent = userName;
         if (userPic !== null) {
@@ -920,6 +929,7 @@ function formatTimeDifference(timestamp) {
 export function changeChannelViewWelcome() {
   const channelInfoPage = document.getElementById("channelInfoPage");
   const welcomeScreen = document.getElementById("welcome-screen");
+  const profileScreen = document.getElementById("profileScreen");
 
   const channelList = document.querySelectorAll(".channel-item");
 
@@ -933,12 +943,150 @@ export function changeChannelViewWelcome() {
 
   // Hide the channel info page
   channelInfoPage.classList.add("d-none");
+
+  profileScreen.classList.add("d-none");
+}
+
+export function changeChannelViewProfile() {
+  const channelInfoPage = document.getElementById("channelInfoPage");
+  const welcomeScreen = document.getElementById("welcome-screen");
+  const profileScreen = document.getElementById("profileScreen");
+
+  const channelList = document.querySelectorAll(".channel-item");
+
+  // Remove the "active" class from all channels
+  channelList.forEach((channel) => {
+    channel.classList.remove("active");
+  });
+
+  // Show the welcome screen
+  welcomeScreen.classList.add("d-none");
+
+  // Hide the channel info page
+  channelInfoPage.classList.add("d-none");
+
+  // Show the profile page
+  profileScreen.classList.remove("d-none");
+
+  //////////////////////////////
+  const emailProfile = document.getElementById("emailProfile");
+  const nameProfile = document.getElementById("nameProfile");
+  const passwordProfile = document.getElementById("passwordProfile");
+  const bioProfile = document.getElementById("bioProfile");
+  const profilePic = document.querySelector("#profilePicturePage");
+  const imageUpload = document.getElementById("imageUploader");
+  const editProfileButton = document.getElementById("editProfileButton");
+  const whileEditButtons = document.getElementById("whileEditButtons");
+  const cancelEditButton = document.getElementById("cancelEditProfile");
+  const saveEditButton = document.getElementById("saveEditProfile");
+
+  const dropdownProfilePic = document.getElementById("profilePictureDropdown");
+
+  apiCallGet(`user/${globalUserId}`, true).then((user) => {
+    if (user.image !== null) {
+      profilePic.src = user.image;
+      dropdownProfilePic.src = user.image;
+    } else {
+      profilePic.src = "default.jpg";
+      dropdownProfilePic.src = "default.jpg";
+    }
+    emailProfile.value = user.email;
+    nameProfile.value = user.name;
+    bioProfile.value = user.bio;
+  });
+
+  editProfileButton.addEventListener("click", function () {
+    // Toggle the contenteditable attribute
+    emailProfile.disabled = false;
+    nameProfile.disabled = false;
+    passwordProfile.disabled = false;
+    bioProfile.disabled = false;
+    imageUpload.disabled = false;
+    editProfileButton.classList.add("d-none");
+    whileEditButtons.classList.remove("d-none");
+  });
+
+  cancelEditButton.addEventListener("click", function () {
+    // Toggle the contenteditable attribute
+    emailProfile.disabled = true;
+    nameProfile.disabled = true;
+    passwordProfile.disabled = true;
+    bioProfile.disabled = true;
+    imageUpload.disabled = true;
+    editProfileButton.classList.remove("d-none");
+    whileEditButtons.classList.add("d-none");
+  });
+
+  const save = function saveChanges() {
+    // Toggle the contenteditable attribute
+    emailProfile.disabled = true;
+    nameProfile.disabled = true;
+    passwordProfile.disabled = true;
+    bioProfile.disabled = true;
+    imageUpload.disabled = true;
+    editProfileButton.classList.remove("d-none");
+    whileEditButtons.classList.add("d-none");
+    updateProfile();
+    saveEditButton.removeEventListener("click", save);
+  };
+  saveEditButton.addEventListener("click", save);
+}
+
+function updateProfile() {
+  apiCallGet(`user/${globalUserId}`, true)
+    .then((user) => {
+      const email = document.getElementById("emailProfile").value;
+      const name = document.getElementById("nameProfile").value;
+      const password = document.getElementById("passwordProfile").value;
+      const bio = document.getElementById("bioProfile").value;
+      const image = document.querySelector('input[type="file"]').files[0];
+
+      const body = {
+        name: name, // always include name
+        bio: bio,
+      };
+
+      if (password !== "") {
+        body.password = password;
+      }
+
+      if (user.email !== email) {
+        body.email = email;
+      }
+
+      if (image === undefined) {
+        body.image = "null";
+        console.log(body);
+        apiCall(`user`, body, "PUT", true)
+          .then(() => {
+            changeChannelViewProfile();
+          })
+          .catch((error) => {
+            console.error(error);
+          });
+      } else {
+        fileToDataUrl(image).then((response) => {
+          body.image = response;
+          apiCall(`user`, body, "PUT", true)
+            .then(() => {
+              changeChannelViewProfile();
+            })
+            .catch((error) => {
+              console.error(error);
+            });
+        });
+      }
+    })
+    .catch((error) => {
+      console.error(error);
+    });
 }
 
 export function changeChannelViewPage(channel, channelId) {
   return new Promise((resolve, reject) => {
     const channelInfoPage = document.getElementById("channelInfoPage");
     const welcomeScreen = document.getElementById("welcome-screen");
+    const profileScreen = document.getElementById("profileScreen");
     const channelName = document.getElementById("channelViewName");
     const channelDescription = document.getElementById(
       "channelViewDescription"
@@ -999,6 +1147,7 @@ export function changeChannelViewPage(channel, channelId) {
     messageSendInput.addEventListener("keydown", messageSendInput.handleEnter);
 
     welcomeScreen.classList.add("d-none");
+    profileScreen.classList.add("d-none");
     channelInfoPage.classList.remove("d-none");
 
     const formattedDate = new Date(channel.createdAt).toLocaleDateString(
