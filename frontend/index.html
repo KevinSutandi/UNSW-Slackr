@@ -156,8 +156,14 @@
         <div class="input-group my-3">
           <input type="text" class="form-control" placeholder="Type a message" aria-label="Type a message"
             id="messageTextInput" />
+          <button class="btn btn-outline-secondary" type="button" id="uploadAttachment">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-paperclip"
+              viewBox="0 0 16 16">
+              <path
+                d="M4.5 3a2.5 2.5 0 0 1 5 0v9a1.5 1.5 0 0 1-3 0V5a.5.5 0 0 1 1 0v7a.5.5 0 0 0 1 0V3a1.5 1.5 0 1 0-3 0v9a2.5 2.5 0 0 0 5 0V5a.5.5 0 0 1 1 0v7a3.5 3.5 0 1 1-7 0V3z" />
+            </svg>
+          </button>
           <button class="btn btn-outline-secondary input-group-text" id="messageTextSend">
-            Send Message &nbsp;
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-send"
               viewBox="0 0 16 16">
               <path
@@ -460,97 +466,123 @@
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Message Template -->
-  <div class="d-none channel-message d-flex gap-3 w-100">
-    <div>
-      <img id="messageProfilePic" class="rounded-circle" src="" style="width: 45px; height: 45px" />
-    </div>
-    <div class="w-100">
-      <div class="d-flex justify-content-between">
-        <div class="d-flex align-items-center gap-2">
-          <a class="mb-1 link-light link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover"
-            id="receipientName">Receipient<a />
-            <p style="font-size: 0.75em" class="text-secondary-emphasis mb-1" id="timeSent">
-              2 hours ago
-            </p>
-        </div>
-
-        <div class="message-buttons d-flex align-items-center gap-1">
-          <button class="btn p-0 m-1" id="pinButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle"
-              viewBox="0 0 16 16" id="hollowPin">
-              <path
-                d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z" />
-            </svg>
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-              class="bi bi-pin-angle-fill d-none" viewBox="0 0 16 16" id="fillPin">
-              <path
-                d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z" />
-            </svg>
-          </button>
-          <button class="btn p-0 m-1" id="editButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil"
-              viewBox="0 0 16 16">
-              <path
-                d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
-            </svg>
-          </button>
-          <button class="btn p-0 m-1" id="deleteMessageButton">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
-              viewBox="0 0 16 16">
-              <path
-                d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
-              <path
-                d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
-            </svg>
-          </button>
-        </div>
+<!-- Message Template -->
+<div class="d-none channel-message d-flex gap-3 w-100">
+  <div>
+    <img id="messageProfilePic" class="rounded-circle" src="" style="width: 45px; height: 45px" />
+  </div>
+  <div class="w-100">
+    <div class="d-flex justify-content-between">
+      <div class="d-flex align-items-center gap-2">
+        <a class="mb-1 link-light link-offset-1 link-underline-opacity-25 link-underline-opacity-100-hover"
+          id="receipientName">Receipient<a />
+          <p style="font-size: 0.75em" class="text-secondary-emphasis mb-1" id="timeSent">
+            2 hours ago
+          </p>
       </div>
-      <p class="fw-light mb-0" style="font-size: 0.9em" id="messageBody">
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Culpa tempora et
-        deserunt laudantium assumenda rerum illo, dolorum laboriosam voluptas
-        animi nostrum? Repellendus incidunt veritatis eius optio accusamus laborum
-        earum mollitia.
-      </p>
-      <div class="mt-1 mb-3">
-        <button class="btn btn-secondary btn-sm reaction-badge" id="thumbsUp">
-          👍<span class="badge badge-count text-bg-secondary">0</span>
+
+      <div class="message-buttons d-flex align-items-center gap-1">
+        <button class="btn p-0 m-1" id="pinButton">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pin-angle"
+            viewBox="0 0 16 16" id="hollowPin">
+            <path
+              d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146zm.122 2.112v-.002.002zm0-.002v.002a.5.5 0 0 1-.122.51L6.293 6.878a.5.5 0 0 1-.511.12H5.78l-.014-.004a4.507 4.507 0 0 0-.288-.076 4.922 4.922 0 0 0-.765-.116c-.422-.028-.836.008-1.175.15l5.51 5.509c.141-.34.177-.753.149-1.175a4.924 4.924 0 0 0-.192-1.054l-.004-.013v-.001a.5.5 0 0 1 .12-.512l3.536-3.535a.5.5 0 0 1 .532-.115l.096.022c.087.017.208.034.344.034.114 0 .23-.011.343-.04L9.927 2.028c-.029.113-.04.23-.04.343a1.779 1.779 0 0 0 .062.46z" />
+          </svg>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+            class="bi bi-pin-angle-fill d-none" viewBox="0 0 16 16" id="fillPin">
+            <path
+              d="M9.828.722a.5.5 0 0 1 .354.146l4.95 4.95a.5.5 0 0 1 0 .707c-.48.48-1.072.588-1.503.588-.177 0-.335-.018-.46-.039l-3.134 3.134a5.927 5.927 0 0 1 .16 1.013c.046.702-.032 1.687-.72 2.375a.5.5 0 0 1-.707 0l-2.829-2.828-3.182 3.182c-.195.195-1.219.902-1.414.707-.195-.195.512-1.22.707-1.414l3.182-3.182-2.828-2.829a.5.5 0 0 1 0-.707c.688-.688 1.673-.767 2.375-.72a5.922 5.922 0 0 1 1.013.16l3.134-3.133a2.772 2.772 0 0 1-.04-.461c0-.43.108-1.022.589-1.503a.5.5 0 0 1 .353-.146z" />
+          </svg>
         </button>
-        <button class="btn btn-secondary btn-sm reaction-badge" id="fire">
-          🔥<span class="badge badge-count text-bg-secondary">0</span>
+        <button class="btn p-0 m-1" id="editButton">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil"
+            viewBox="0 0 16 16">
+            <path
+              d="M12.146.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1 0 .708l-10 10a.5.5 0 0 1-.168.11l-5 2a.5.5 0 0 1-.65-.65l2-5a.5.5 0 0 1 .11-.168l10-10zM11.207 2.5 13.5 4.793 14.793 3.5 12.5 1.207 11.207 2.5zm1.586 3L10.5 3.207 4 9.707V10h.5a.5.5 0 0 1 .5.5v.5h.5a.5.5 0 0 1 .5.5v.5h.293l6.5-6.5zm-9.761 5.175-.106.106-1.528 3.821 3.821-1.528.106-.106A.5.5 0 0 1 5 12.5V12h-.5a.5.5 0 0 1-.5-.5V11h-.5a.5.5 0 0 1-.468-.325z" />
+          </svg>
         </button>
-        <button class="btn btn-secondary btn-sm reaction-badge" id="heart">
-          ❤️<span class="badge badge-count text-bg-secondary">0</span>
+        <button class="btn p-0 m-1" id="deleteMessageButton">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash"
+            viewBox="0 0 16 16">
+            <path
+              d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
+            <path
+              d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <p class="fw-light mb-0" style="font-size: 0.9em" id="messageBody">
+    </p>
+    <div class="mt-1 mb-3">
+      <button class="btn btn-secondary btn-sm reaction-badge" id="thumbsUp">
+        👍<span class="badge badge-count text-bg-secondary">0</span>
+      </button>
+      <button class="btn btn-secondary btn-sm reaction-badge" id="fire">
+        🔥<span class="badge badge-count text-bg-secondary">0</span>
+      </button>
+      <button class="btn btn-secondary btn-sm reaction-badge" id="heart">
+        ❤️<span class="badge badge-count text-bg-secondary">0</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Channel Modal -->
+<div class="modal fade" id="editMessageModal" tabindex="-1" aria-labelledby="editMessageModal" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="editMessageLabel">Edit Message</h1>
+        <button type="button" class="btn-close cancel-edit-message" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="edit-message-text" class="col-form-label">New Message:</label>
+            <textarea class="form-control" id="newMessageEdit"></textarea>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary cancel-edit-message">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" id="editMessageButton">
+          Save Changes
         </button>
       </div>
     </div>
   </div>
+</div>
 
-  <!-- Edit Channel Modal -->
-  <div class="modal fade" id="editMessageModal" tabindex="-1" aria-labelledby="editMessageModal" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h1 class="modal-title fs-5" id="editMessageLabel">Edit Message</h1>
-          <button type="button" class="btn-close cancel-edit-message" aria-label="Close"></button>
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="mb-3">
-              <label for="edit-message-text" class="col-form-label">New Message:</label>
-              <textarea class="form-control" id="newMessageEdit"></textarea>
+<div class="modal fade" id="uploadImageMessage" tabindex="-1" aria-labelledby="uploadImageMessage" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="uploadImageTitle">Upload an Image</h1>
+        <button type="button" class="btn-close cancel-upload" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <div class="mb-3">
+            <label for="upload-image-subtext" class="col-form-label">Upload an image:</label>
+            <div class="input-group mb-3">
+              <input type="file" class="form-control" id="uploadImage">
             </div>
-          </form>
-        </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary cancel-edit-message">
-            Cancel
-          </button>
-          <button type="button" class="btn btn-primary" id="editMessageButton">
-            Save Changes
-          </button>
-        </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary cancel-upload">
+          Cancel
+        </button>
+        <button type="button" class="btn btn-primary" id="uploadImageButton" disabled>
+          Send Message
+        </button>
       </div>
     </div>
   </div>
+</div>
